@@ -1,0 +1,22 @@
+.flex-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-container > * {
+  width: 100%;
+}
+
+.course-name {
+  padding-bottom: 10px;
+}
+
+.description {
+  margin-bottom: 10px;
+}
+
+.description {
+  .mat-dialog-title {
+    margin-bottom: 0;
+  }
+}

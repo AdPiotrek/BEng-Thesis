@@ -1,0 +1,22 @@
+.alert {
+  max-width: 300px;
+  border: 1px solid;
+  border-radius: 4px;
+  margin-bottom: 40px;
+  padding: 20px;
+  color: white;
+
+}
+
+.alert-danger {
+  background-color: orangered;
+  border-color: darken(orangered, 10%)
+}
+
+.alert-success {
+  background-color: darken(#65ee71, 10%);
+}
+
+.alert-info {
+  background-color: #627dd7;
+}

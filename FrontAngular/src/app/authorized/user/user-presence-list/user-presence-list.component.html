@@ -1,0 +1,13 @@
+<div class="container" #pdfContent>
+
+  <mat-list class="course-days" >
+    <mat-list-item *ngIf="userPresences && userPresences.length === 0">Nie masz jeszcze żadnych obecności</mat-list-item>
+    <mat-list-item *ngFor="let day of userPresences$ | async" class="course-days-item">
+      <span class="course-days-day">{{ day.startTime | date:'shortDate' }}</span>
+      <span class="course-days-startTime">{{ day.startTime | date:'shortTime' }}</span>
+      <span class="course-days-seperator"> do </span>
+      <span class="course-days-endTime">{{ day.endTime | date:'shortTime'}}</span>
+    </mat-list-item>
+  </mat-list>
+  <button mat-button color="primary" (click)="downloadPDF()" >Pobierz pdf !</button>
+</div>

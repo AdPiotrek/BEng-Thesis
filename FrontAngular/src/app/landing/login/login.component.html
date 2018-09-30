@@ -1,0 +1,23 @@
+<div class="u-main-container">
+  <mat-card class="mat-card-form">
+    <mat-card-title>
+      Zaloguj się !
+    </mat-card-title>
+    <mat-card-content class="form-container">
+      <form [formGroup]="loginForm" (ngSubmit)="signIn()">
+        <mat-form-field class="form-control">
+          <input type="email" matInput placeholder="Email" formControlName="email">
+          <mat-error>Podany email ma nieprawidłowy format</mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-control">
+          <input type="password" matInput placeholder="Hasło" formControlName="password"/>
+          <mat-error>Hasło musi mieć co najmniej 6 cyfr</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary"  [disabled]="loginForm.invalid" >Zaloguj</button>
+      </form>
+    </mat-card-content>
+    <mat-card-footer class="footer">
+      Nie masz konta ? <a routerLink="/registration">Zarejestruj się !</a>
+    </mat-card-footer>
+  </mat-card>
+</div>

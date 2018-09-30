@@ -1,0 +1,36 @@
+<div class="u-main-container">
+  <mat-card class="mat-card-form">
+    <mat-card-title>
+      Zarejestruj się !
+    </mat-card-title>
+    <mat-card-content class="form-container">
+      <form [formGroup]="registerForm" (ngSubmit)="registerUser()">
+        <mat-form-field class="form-control">
+          <input type="text" matInput placeholder="Imię" formControlName="firstName">
+        </mat-form-field>
+        <mat-form-field class="form-control">
+          <input type="text" matInput placeholder="Nazwisko" formControlName="lastName"/>
+        </mat-form-field>
+        <mat-form-field class="form-control">
+          <input type="text" matInput placeholder="Email" formControlName="email"/>
+          <mat-error>Podany email ma nieprawidłowy format</mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-control">
+          <input type="password" matInput placeholder="Hasło" formControlName="password"/>
+          <mat-error>Hasło musi zawierać co najmniej 6 znaków</mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-control">
+          <input type="password" matInput placeholder="Powtórz hasło" formControlName="confirmedPassword" [errorStateMatcher]="confirmPasswordErrorMatcher" />
+          <mat-error>Podane hasła nie są takie same</mat-error>
+        </mat-form-field>
+        <div class="form-control">
+          <mat-checkbox matInput placeholder="Powtórz hasło" (change)="roleChange($event)" >Konto instruktora</mat-checkbox>
+        </div>
+        <button mat-raised-button color="primary"  [disabled]="registerForm.invalid" >Zarejestruj się</button>
+      </form>
+    </mat-card-content>
+    <mat-card-footer class="footer">
+      Masz konto ? <a routerLink="/login">Zaloguj się!</a>
+    </mat-card-footer>
+  </mat-card>
+</div>

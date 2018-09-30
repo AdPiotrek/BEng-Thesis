@@ -1,0 +1,16 @@
+@import '../../../assets/styles/variables';
+
+
+.header {
+  height: 95vh;
+  background-image: linear-gradient(to right top, rgba($color-primary-light,.1), rgba($color-primary-dark,.7)),url('../../../assets/images/bg-1.jpg');
+  background-size: cover;
+}
+.welcome-text {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+

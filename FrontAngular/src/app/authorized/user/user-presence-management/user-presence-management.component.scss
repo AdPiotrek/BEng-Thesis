@@ -1,0 +1,23 @@
+@import '../../../../assets/styles/variables';
+
+.fixed-timer-container {
+  position: fixed;
+  top: 100px;
+  right: 70px;
+}
+
+.timer {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  &-digit {
+    display: flex;
+    align-items: center;
+  }
+  &-heading {
+    margin-right: 7px;
+  }
+}
+
+
+

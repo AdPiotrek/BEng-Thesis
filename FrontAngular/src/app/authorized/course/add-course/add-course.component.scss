@@ -1,0 +1,39 @@
+.flex-container {
+  padding-top: 10px;
+}
+
+.flex-container > * {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.add-course-container {
+  display: grid;
+  width: 70%;
+  margin: 0 auto;
+  grid-template-columns: repeat(2, 300px);
+  grid-template-rows: auto auto;
+  grid-column-gap: 100px;
+}
+
+.course-days-form {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  flex-direction: column;
+  & > * {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.delete-button {
+  margin-left: auto;
+}
+
+.course-day {
+  display: flex;
+}
+

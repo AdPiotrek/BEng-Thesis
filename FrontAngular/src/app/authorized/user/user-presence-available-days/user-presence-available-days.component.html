@@ -1,0 +1,18 @@
+<div class="container">
+  <ng-container *ngIf="(choosedCourse | async) as course; else noCourse">
+    <mat-list class="course-days">
+      <mat-list-item *ngFor="let day of course.courseDays" class="course-days-item">
+        <span class="course-days-day">{{ day.startTime | date:'shortDate' }}</span>
+        <span class="course-days-startTime">{{ day.startTime | date:'shortTime' }}</span>
+        <span class="course-days-seperator"> do </span>
+        <span class="course-days-endTime">{{ day.endTime | date:'shortTime'}}</span>
+      </mat-list-item>
+    </mat-list>
+  </ng-container>
+  <ng-template #noCourse>
+    <div>
+      Nie wybrałeś zadnego kursu
+    </div>
+  </ng-template>
+
+</div>

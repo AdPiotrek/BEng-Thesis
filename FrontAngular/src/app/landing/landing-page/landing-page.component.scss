@@ -1,0 +1,18 @@
+@import '../../../assets/styles/variables';
+
+.darkPrimary{
+  display: inline-block;
+  background-color: $color-primary-dark;
+  height: 100px;
+}
+.colorPrimary{
+  display: inline-block;
+  background-color: $color-primary;
+  height: 100px;
+}
+
+.lightPrimary{
+  display: inline-block;
+  background-color: $color-primary-light;
+  height: 100px;
+}

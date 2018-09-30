@@ -1,0 +1,33 @@
+<form [formGroup]="userPresenceForm" class="course-days-form">
+  <mat-form-field>
+    <input matInput [matDatepicker]="courseDayPicker" placeholder="Data rozpoczęcia kursu" formControlName="day">
+    <mat-datepicker-toggle matSuffix [for]="courseDayPicker"></mat-datepicker-toggle>
+    <mat-datepicker #courseDayPicker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Czas lekcji" type="time" formControlName="startTime">
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Czas przerwy" type="time" formControlName="endTime">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="addPresenceDay()" [disabled]="userPresenceForm.invalid">Dodaj obecnosć ! </button>
+  <span style="margin-bottom: 20px;">Obecności:</span>
+  <ng-container *ngIf="userPresences && userPresences.length > 0; else noCourses">
+    <ul #courses *ngFor="let presence of userPresences">
+      <li class="presence">
+        <div>
+          {{ presence.startTime | date:'shortDate' }}
+          {{ presence.startTime | date:'shortTime' }} -
+          {{ presence.endTime | date:'shortTime' }}
+        </div>
+        <div class="delete-button" (click)="deletePresence(presence)">
+          <mat-icon>close</mat-icon>
+        </div>
+      </li>
+    </ul>
+  </ng-container>
+  <ng-template #noCourses>
+    Użytkownik nie ma żadnych obecności
+  </ng-template>
+  <button type="button" mat-raised-button (click)="savePresences()" style="margin-top: 20px;">Zapisz obecności w kursie!</button>
+</form>

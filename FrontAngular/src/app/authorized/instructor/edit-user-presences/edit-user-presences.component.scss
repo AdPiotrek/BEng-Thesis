@@ -1,0 +1,21 @@
+.course-days-form {
+
+  min-width: 400px;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  flex-direction: column;
+  & > * {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+.delete-button {
+  margin-left: auto;
+}
+
+.presence {
+  display: flex;
+}

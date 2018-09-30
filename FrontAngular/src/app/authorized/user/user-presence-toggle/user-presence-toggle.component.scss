@@ -1,0 +1,45 @@
+$container-padding: 10px;
+
+.presence-disactive {
+  padding: $container-padding;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  &-description {
+    display: flex;
+    flex-direction: column;
+    &-heading {
+      padding-right: 10px;
+    }
+  }
+}
+
+.presence-active {
+  display: flex;
+  justify-content: space-between;
+  padding: $container-padding;
+  width: 100%;
+}
+
+.mat-button.btn-start {
+  background-color: #00C853;
+  color: #ffffff;
+}
+
+.mat-raised-button.btn-end {
+  display: flex;
+  align-items: center;
+}
+
+.u-main-container {
+  justify-content: space-between;
+}
+
+.refresh-component {
+  padding: 10px 10px;
+  align-self: flex-end;
+}
+
+.info-wrapper {
+  display: flex;
+}

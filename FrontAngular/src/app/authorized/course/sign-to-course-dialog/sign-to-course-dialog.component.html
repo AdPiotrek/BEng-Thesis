@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>
+  Zapisz się do kursu
+</h1>
+<div class="description" *ngIf="course?.description">
+  <h3 mat mat-dialog-title>
+    Opis
+  </h3>
+  <p>
+    {{course.description}}
+  </p>
+</div>
+
+<div matDialogContent>
+  <form [formGroup]="signInToCourseForm" (ngSubmit)="signInToCourse()" class="flex-container">
+    <p class="course-name">
+      Nazwa kursu: {{ course.name }}
+    </p>
+    <mat-form-field class="example-full-width">
+      <input type="text" matInput placeholder="Klucz" formControlName="key"/>
+    </mat-form-field>
+    <button type="submit" mat-raised-button color="primary"  [disabled]="signInToCourseForm.invalid">Zapisz sie !</button>
+
+    <div *ngIf="( signToCourse$|async ) as response" [ngClass]="responseClass">
+      {{ response }}
+    </div>
+  </form>
+</div>
+

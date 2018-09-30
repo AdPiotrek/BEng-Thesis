@@ -1,0 +1,20 @@
+<nav mat-tab-nav-bar>
+  <a mat-tab-link
+     *ngFor="let link of links"
+     [routerLink]="link.url"
+     routerLinkActive #rla="routerLinkActive"
+     [active]="rla.isActive">
+    {{link.label}}
+  </a>
+  <a mat-tab-item mat-raised-button class="refresh-button"> Odśwież</a>
+</nav>
+<div class="fixed-timer-container">
+  <div class="u-main-container">
+    <div class="timer">
+      <h3 class="timer-heading">Obecny czas :</h3>
+      <div class="timer-digit">{{timerObservable | async | date:'mediumTime'}}</div>
+    </div>
+  </div>
+</div>
+
+<router-outlet (activate)="changeChildRef($event)"></router-outlet>

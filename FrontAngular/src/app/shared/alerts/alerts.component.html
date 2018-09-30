@@ -1,0 +1,10 @@
+<div class="alerts-wrapper">
+  <ng-container *ngFor="let alert of alerts">
+    <app-alert [message]="alert.message"
+               [type]="alert.type"
+               [lifetime]="alert.lifetime"
+               [closeOnIcon]="alert.closeOnIcon"
+               (onClose)="onAlertClose(alert)">
+    </app-alert>
+  </ng-container>
+</div>
