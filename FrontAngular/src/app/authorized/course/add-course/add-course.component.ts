@@ -129,16 +129,10 @@ export class AddCourseComponent implements OnInit {
       courseEndDate = Date.parse(courseEndDate)
     }
 
-    // console.log(courseDay.startTime, courseStartDate)
-    // console.log(courseDay.endTime, courseEndDate + 24 * 3600 * 1000);
-    // console.log(courseDay.startTime >= courseStartDate)
-    // console.log(courseDay.endTime <= courseEndDate + (24 * 3600 * 1000));
-
     return courseDay.startTime >= courseStartDate && courseDay.endTime <= courseEndDate + 24 * 3600 * 1000 -1 ;
   }
 
   deletePresence(courseDay) {
-    console.log(courseDay)
     this.courseDays = this.courseDays.filter((day) => day !== courseDay)
   }
 

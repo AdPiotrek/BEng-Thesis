@@ -16,7 +16,6 @@ router.post('/register', (req, res, next) => {
                     error: 'User with this email already exists'
                 });
             } else {
-                console.log(err)
                 res.status('500').send();
             }
         })
@@ -27,7 +26,6 @@ router.post('/login', (req, res, next) => {
     User.getUserByEmail(req.body.email)
         .then((user) => {
             fetchedUser = user;
-            console.log(user)
             return User.comparePassword(req.body.password, user.password);
         })
         .then(isMatch => {

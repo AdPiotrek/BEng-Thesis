@@ -5,28 +5,6 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-var j = schedule.scheduleJob('* * * * *', (fireDate) => {
-    console.log(fireDate)
-    Course.find({ 'usersPresences.isActive': true })
-        .then((courses) => {
-            for (const course of courses) {
-                let shouldBeSaved = false;
-                course.usersPresences = course.usersPresences.map((presence) => {
-                    if (presence.plannedEnding < fireDate && presence.isActive) {
-                        console.log('editingPresence')
-                        presence.endTime = presence.plannedEnding;
-                        presence.isActive = false;
-                        shouldBeSaved = true;
-                        return presence;
-                    }
-                });
-                if (shouldBeSaved) {
-                    course.save()
-                }
-            }
-        })
-});
-
 router.get('', (req, res, next) => {
     let perPage = 10;
     let page = req.params['page'] > 0 ? req.params['page'] : 0;
@@ -86,8 +64,6 @@ router.put('/:id/users',async  (req, res, next) => {
         return;
     }
 
-    console.log(preparedCourse.key, req.body)
-
     if(preparedCourse.key.toString() !== req.body.key) {
         res.status(404).send({message: 'Podany klucz nie zgadza się'})
         return;
@@ -95,7 +71,6 @@ router.put('/:id/users',async  (req, res, next) => {
 
     Course.findById(req.params.id)
         .then(course => {
-            console.log(req.body.userId);
             course.users.push(req.body.userId);
             return course.save()
         })
@@ -113,43 +88,6 @@ router.put('/:id/users',async  (req, res, next) => {
         .catch(err => res.status(500))
 });
 
-// router.put(':id/presence', (req, res, next) => {
-//     const currentDate = new Date();
-//
-//     registerNewPressence = (course) => {
-//         const availableCourseDay = course.courseDays.find(day => day.startTime < currentDate && day.endTime > currentDate);
-//
-//         if (availableCourseDay) {
-//             course.usersPresences.push({
-//                 user: req.body.userId,
-//                 startTime: currentDate,
-//                 endTime: null,
-//                 plannedEnding: availableCourseDay.endTime
-//             })
-//             return Promise.resolve(course.usersPresences[course.usersPresences.length - 1])
-//         }
-//
-//         Promise.reject({ status: '404', responseText: 'There are no lessons during this time' })
-//     };
-//
-//     endCurrentPressence = (course) => {
-//         course.usersPresences = course.usersPresences.map((presence) => {
-//             if (!presence.isActive || user !== req.body.userId) {
-//                 return presence;
-//             }
-//             presence.isActive = false;
-//             presence.endTime = currentDate;
-//             return presence;
-//         });
-//         return course.save();
-//     };
-//
-//     Course.findOne({ _id: req.params.id, 'usersPresences.isActive': true })
-//         .then(course => {
-//             course ? endCurrentPressence(course) : registerNewPressence(course);
-//         })
-//         .then(course => res.send(course))
-// });
 
 router.post('/:id/startPressence', (req, res, next) => {
 
@@ -162,8 +100,6 @@ router.post('/:id/startPressence', (req, res, next) => {
                 return Course.findById(req.params['id'])
             }
 
-            console.log('shouldntBeHere')
-
             return Promise.reject({
                 status: 404,
                 message: 'You have currently started presence'
@@ -171,8 +107,6 @@ router.post('/:id/startPressence', (req, res, next) => {
         })
         .then(async (course) => {
             const availableCourseDay = course.courseDays.find(day => day.startTime < currentDate && day.endTime > currentDate);
-
-            console.log(availableCourseDay);
 
             if (availableCourseDay) {
                 course.usersPresences.push({
@@ -198,7 +132,7 @@ router.put('/:id/endPresence', (req, res, next) => {
 
     Course.findById(req.params['id'])
         .then((course) => {
-            const presence = course.usersPresences.id(req.body._id)
+            const presence = course.usersPresences.id(req.body._id);
             presence.isActive = false;
             presence.endTime = new Date();
             console.log(course.usersPresences.id(req.body._id));
