@@ -45,3 +45,11 @@ table {
 .mat-column-endDate {
   padding: 0 10px;
 }
+
+
+tr.mat-row {
+  &:hover {
+    background-color: rgba(#000, .2);
+    cursor: pointer;
+  }
+}

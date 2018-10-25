@@ -50,12 +50,14 @@ try {
         cert: certificate,
         passphrase: 'qwerty'
     };
-    const httpServer = https.createServer(credentials, app);
-    httpServer.listen(4000)
 
-    // app.listen(4000, () => {
-    //     'Express saying hello to the world :D';
-    // })
+
+    // const httpServer = https.createServer(credentials, app);
+    // httpServer.listen(4000)
+
+    app.listen(4000, () => {
+        'Express saying hello to the world :D';
+    })
 } catch (e) {
     console.log(e)
 }

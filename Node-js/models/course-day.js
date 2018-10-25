@@ -10,7 +10,10 @@ const courseDaySchema = new Schema({
     endTime: {
         type: Date,
         required: [true, 'End date is required']
-    }
+    },
+    presentUsers: [{
+        type: Schema.Types.ObjectId,
+    }]
 });
 
 module.exports = courseDaySchema;

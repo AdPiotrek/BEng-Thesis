@@ -8,6 +8,13 @@
       <span class="course-days-seperator"> do </span>
       <span class="course-days-endTime">{{ day.endTime | date:'shortTime'}}</span>
     </mat-list-item>
+    <ng-container *ngIf="!(userPresences$ | async)">
+      <mat-list-item>
+        Nie masz jeszcze żadnych obecności
+      </mat-list-item>
+    </ng-container>
   </mat-list>
-  <button mat-button color="primary" (click)="downloadPDF()" >Pobierz pdf !</button>
+  <ng-container *ngIf="!(userPresences$ | async)">
+    <button mat-button color="primary" (click)="downloadPDF()" >Pobierz pdf !</button>
+  </ng-container>
 </div>

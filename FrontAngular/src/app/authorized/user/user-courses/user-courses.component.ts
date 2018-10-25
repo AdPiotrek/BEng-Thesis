@@ -7,6 +7,7 @@ import { Pagination } from '../../../core/models/pagination';
 import { UserRestService } from '../services/user-rest.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CourseService } from '../services/course.service';
+import { AlertService } from '../../../core/services/alert.service';
 
 @Component({
   selector: 'app-user-courses',
@@ -26,7 +27,8 @@ export class UserCoursesComponent implements OnInit {
 
   constructor(private userRest: UserRestService,
               private route: ActivatedRoute,
-              private courseService: CourseService) {
+              private courseService: CourseService,
+              private alertService: AlertService) {
   }
 
   ngOnInit() {
@@ -55,6 +57,7 @@ export class UserCoursesComponent implements OnInit {
 
   chooseCourse(course: Course) {
     this.courseService.changeChoosedCourse(course);
+    this.alertService.newAlert('Zmieniono wybrany kurs')
   }
 
 }

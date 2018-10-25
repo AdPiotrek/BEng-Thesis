@@ -6,6 +6,7 @@ import { UserPresence } from '../../../core/models/user-presence';
 import { UserPresenceService } from '../../user/services/user-presence.service';
 import { switchMap } from 'rxjs/operators';
 import { AlertService } from '../../../core/services/alert.service';
+import { CourseDay } from '../../../core/models/course-day';
 
 @Component({
   selector: 'app-course-active-presences',
@@ -14,7 +15,7 @@ import { AlertService } from '../../../core/services/alert.service';
 })
 export class CourseActivePresencesComponent implements OnInit {
 
-  activePresences: UserPresence[] = null;
+  activePresences: CourseDay = null;
 
   constructor(private userService: UserService,
               private courseService: CourseService,
@@ -29,18 +30,18 @@ export class CourseActivePresencesComponent implements OnInit {
 
   getActivePresences() {
     this.courseRestService.getActivePresences(this.courseService.choosedCourse._id)
-      .subscribe((activePresences) => {
-        this.activePresences = activePresences;
+      .subscribe((courseDay) => {
+        this.activePresences = courseDay;
       })
   }
 
-  endPresence(presence: UserPresence) {
-    this.userPresenceService.endPresence(this.courseService.choosedCourse._id, presence)
+  endPresence(courseDay, userId) {
+    this.userPresenceService.deletePresences(this.courseService.choosedCourse._id, userId, courseDay)
       .pipe(switchMap(() => {
         return this.courseRestService.getActivePresences(this.courseService.choosedCourse._id);
-      })).subscribe((presences: UserPresence[]) => {
-        this.alertService.newAlert('Obecność zatrzymana')
-        this.activePresences = presences;
+      })).subscribe((courseDay: CourseDay) => {
+        this.alertService.newAlert('Obecność usunięta');
+        this.activePresences = courseDay;
     })
   }
 

@@ -6,6 +6,8 @@ import {Observable} from 'rxjs/internal/Observable';
 import {Pagination} from '../../../core/models/pagination';
 import {AddUserToCourseRequest} from '../../../core/models/add-user-to-course-request';
 import { UserPresence } from '../../../core/models/user-presence';
+import { CourseDay } from '../../../core/models/course-day';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +28,8 @@ export class CourseRestService {
     return this.http.put<Course>(`${environment.restApiUrl}/courses/${courseId}/users`, data)
   }
 
-  getActivePresences(courseId: string): Observable<UserPresence[]> {
-    return this.http.get<UserPresence[]>(`${environment.restApiUrl}/courses/${courseId}/active-presences`)
+  getActivePresences(courseId: string): Observable<CourseDay> {
+    return this.http.get<CourseDay>(`${environment.restApiUrl}/courses/${courseId}/active-presences`)
   }
 
   getPresences(courseId: string) {

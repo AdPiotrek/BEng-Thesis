@@ -51,25 +51,53 @@ router.get('/:id/courses', (req, res, next) => {
         })
 });
 
-router.get('/:id/presences/:courseId', (req, res, next) => {
-    User.getUserById(req.params['id'])
-        .populate('courses')
-        .then((user) => {
-            const course = user.courses.find((course) => course._id.toString() === req.params['courseId']);
+router.get('/:id/presences/:courseId', async (req, res, next) => {
+    // User.getUserById(req.params['id'])
+    //     .populate('courses')
+    //     .then((user) => {
+    //         const course = user.courses.find((course) => course._id.toString() === req.params['courseId']);
+    //
+    //         const presences = course.courseDays.filter((presence) => {
+    //             return presence.user.toString() === req.params['id']
+    //         });
+    //
+    //         return res.send(presences)
+    //     })
 
-            const presences = course.usersPresences.filter((presence) => {
-                return presence.user.toString() === req.params['id']
-            });
+    const course = await Course.findById(req.params['courseId']);
 
-            return res.send(presences)
-        })
+    let userPresences = course.courseDays.map((courseDay) => {
+        if (courseDay.presentUsers.find(id => id.equals(req.params['id']))) {
+            return courseDay;
+        }
+
+        return null;
+    });
+
+    userPresences = userPresences.filter(x => !!x)
+
+    res.send(userPresences)
+
+
 });
 
-router.get('/:id/activePresence/:courseId', (req, res, next) => {
-    Course.findById(req.params['courseId'])
-        .then(course => {
-            res.send(...course.usersPresences.filter(presence => presence.user.toString() === req.params['id'] && presence.isActive));
-        })
+router.get('/:id/activePresence/:courseId', async (req, res, next) => {
+
+
+    const currentDate = new Date();
+
+    const course = await Course.findById(req.params['courseId']);
+
+    const availableCourseDay = await course.courseDays.find(day => day.startTime < currentDate && day.endTime > currentDate);
+
+    if (availableCourseDay) {
+        presence = availableCourseDay.presentUsers.find((id) => id.equals(req.params['id']))
+        res.send(availableCourseDay)
+        return;
+    }
+
+    res.send(null);
+
 });
 
 module.exports = router;

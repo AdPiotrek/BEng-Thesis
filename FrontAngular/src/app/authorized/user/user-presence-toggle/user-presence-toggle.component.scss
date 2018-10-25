@@ -1,5 +1,10 @@
 $container-padding: 10px;
 
+.toggle-presence {
+  border: solid rgba(#3f51b5, .6);
+  border-width: 0 2px 2px 2px;
+}
+
 .presence-disactive {
   padding: $container-padding;
   width: 100%;

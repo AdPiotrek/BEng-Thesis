@@ -5,9 +5,6 @@ export const endTimeValidator: ValidatorFn = (control: FormGroup): ValidationErr
   const endTime = control.get('endTime').value;
   let endTimeBeforeStartTime = false;
 
-  console.log(startTime);
-  console.log(endTime);
-
   if (!endTime || !startTime) {
     return { endTimeBeforeStartTime }
   }

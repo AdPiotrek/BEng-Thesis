@@ -13,7 +13,7 @@ export class AlertService {
 
   constructor() { }
 
-  newAlert(text: string, type: string = 'success', lifetime: number = 0, closeOnIcon: boolean = true) {
+  newAlert(text: string, type: string = 'success', lifetime: number = 3000, closeOnIcon: boolean = true) {
     const newAlert: Alert = {
       message: text,
       type: type,

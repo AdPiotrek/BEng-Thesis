@@ -35,10 +35,13 @@
       <mat-datepicker #courseDayPicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Czas lekcji" type="time" formControlName="startTime">
+      <input matInput placeholder="Liczba jednostek" type="number" formControlName="partsCount">
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Czas przerwy" type="time" formControlName="endTime">
+      <input matInput placeholder="Czas startu" type="time" formControlName="startTime">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Czas zakończenia" type="time" formControlName="endTime"  readonly>
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="addCourseDay()" [disabled]="courseDayForm.invalid">Dodaj dzień kursu!</button>
     <span>Dni kursu</span>

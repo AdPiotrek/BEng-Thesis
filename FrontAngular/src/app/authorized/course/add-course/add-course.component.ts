@@ -5,6 +5,11 @@ import { Course } from '../../../core/models/course';
 import { CourseDay } from '../../../core/models/course-day';
 import { AlertService } from '../../../core/services/alert.service';
 import { endTimeValidator } from '../../../shared/validators/end-time-validator';
+import { combineLatest, map, tap } from 'rxjs/operators';
+import * as moment from 'moment'
+import { Moment } from 'moment';
+import { merge } from 'rxjs';
+import { of } from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'app-add-course',
@@ -15,6 +20,7 @@ export class AddCourseComponent implements OnInit {
   courseCreatingForm: FormGroup;
   courseDayForm: FormGroup;
   courseDays: Array<CourseDay> = [];
+
 
   startDateFilter = (day: Date): boolean => {
     return day >= this.courseCreatingForm.value['startDate']
@@ -28,15 +34,64 @@ export class AddCourseComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
+    const timeValueChange = merge(
+      this.courseCreatingForm.valueChanges,
+      of({...this.courseCreatingForm.value})
+    );
 
+    this.courseCreatingForm.valueChanges.pipe(
+      tap((value) => {
+        this.courseDays.forEach((courseDay) => {
+
+          let { lessonTime, breakTime } = value;
+          const { partsCount } = courseDay;
+
+          lessonTime = this.getTimeFromInput(lessonTime);
+          breakTime = this.getTimeFromInput(breakTime);
+
+          lessonTime = +lessonTime.hours * 60 + +lessonTime.minutes;
+          breakTime = +breakTime.hours * 60 + +breakTime.minutes;
+
+          let momentObject = moment(courseDay.startTime);
+
+          momentObject.add(partsCount * (lessonTime + breakTime), 'minutes');
+
+          courseDay.endTime = momentObject.toDate();
+        })
+      })
+    ).subscribe()
+
+    this.courseDayForm.get('startTime').valueChanges.pipe(
+      combineLatest(timeValueChange),
+      map(([value, formValue]) => {
+        const time = this.getTimeFromInput(value);
+        const momentObject: Moment = moment().hour(+time.hours).minutes(+time.minutes);
+        let { lessonTime, breakTime } = formValue;
+        const partsCount = this.courseDayForm.value.partsCount;
+        lessonTime = this.getTimeFromInput(lessonTime);
+        breakTime = this.getTimeFromInput(breakTime);
+
+        lessonTime = +lessonTime.hours * 60 + +lessonTime.minutes;
+        breakTime = +breakTime.hours * 60 + +breakTime.minutes;
+
+        momentObject.add(partsCount * (lessonTime + breakTime), 'minutes');
+        if (+momentObject.hours() < +time.hours) {
+          return {}
+        }
+
+        const minutes = momentObject.get('minutes') < 10 ? `0${momentObject.get('minutes')}` : momentObject.get('minutes');
+        const hours = momentObject.get('hours')
+        this.courseDayForm.patchValue({ 'endTime': `${hours}:${minutes}` })
+      }),
+    ).subscribe()
+  }
 
   createCourseCreatingForm(): void {
     this.courseCreatingForm = this.fb.group({
       'name': ['', Validators.required],
       'key': ['', [Validators.required, Validators.minLength(4)]],
-      'startDate': [new Date().setHours(0,0,0), Validators.required],
-      'endDate': [new Date().setHours(0,0,0), Validators.required],
+      'startDate': [new Date().setHours(0, 0, 0), Validators.required],
+      'endDate': [new Date().setHours(0, 0, 0), Validators.required],
       'partsCount': [1, [Validators.required, Validators.min(1)]],
       'lessonTime': ['00:45', [Validators.required]],
       'breakTime': ['00:15', [Validators.required,]]
@@ -47,14 +102,14 @@ export class AddCourseComponent implements OnInit {
     this.courseDayForm = this.fb.group({
       'day': [new Date(), Validators.required],
       'startTime': ['', [Validators.required]],
-      'endTime': ['', [Validators.required]]
+      'endTime': ['', [Validators.required]],
+      'partsCount': [1, [Validators.required, Validators.min(1)]],
     }, { validator: endTimeValidator });
   }
 
   addCourseDay(): void {
     const courseDay: CourseDay = this.createCourseDay();
-    console.log(!this.isCourseDayInsideCourseDays(courseDay));
-    if(!this.isCourseDayInsideCourseDays(courseDay)){
+    if (!this.isCourseDayInsideCourseDays(courseDay)) {
       this.alertService.newAlert(
         'Dzień który chcesz dodać nie zawiera się w okresie kursu',
         'danger',
@@ -85,6 +140,7 @@ export class AddCourseComponent implements OnInit {
           this.courseCreatingForm.reset();
           this.courseDayForm.reset();
           this.courseDays = [];
+          this.alertService.newAlert('Kurs został dodany pomyślnie')
         },
         (err) => {
           this.alertService.newAlert(err.error.message, 'danger')
@@ -109,8 +165,10 @@ export class AddCourseComponent implements OnInit {
     const day = this.courseDayForm.value.day;
     const dayStartTime = this.getTimeFromInput(this.courseDayForm.value.startTime);
     const dayEndTime = this.getTimeFromInput(this.courseDayForm.value.endTime);
+    const partsCount = this.courseDayForm.value.partsCount;
 
     return {
+      partsCount,
       startTime: new Date(day).setHours(+dayStartTime.hours, +dayStartTime.minutes),
       endTime: new Date(day).setHours(+dayEndTime.hours, +dayEndTime.minutes)
     }
@@ -120,23 +178,18 @@ export class AddCourseComponent implements OnInit {
     let courseStartDate = this.courseCreatingForm.get('startDate').value;
     let courseEndDate = this.courseCreatingForm.get('endDate').value;
 
-    console.log(typeof courseStartDate)
-
-    if(typeof courseStartDate === 'object') {
+    if (typeof courseStartDate === 'object') {
       courseStartDate = Date.parse(courseStartDate)
     }
     if (typeof courseEndDate === 'object') {
       courseEndDate = Date.parse(courseEndDate)
     }
 
-    return courseDay.startTime >= courseStartDate && courseDay.endTime <= courseEndDate + 24 * 3600 * 1000 -1 ;
+    return courseDay.startTime >= courseStartDate && courseDay.endTime <= courseEndDate + 24 * 3600 * 1000 - 1;
   }
 
   deletePresence(courseDay) {
     this.courseDays = this.courseDays.filter((day) => day !== courseDay)
   }
-
-
-
 
 }

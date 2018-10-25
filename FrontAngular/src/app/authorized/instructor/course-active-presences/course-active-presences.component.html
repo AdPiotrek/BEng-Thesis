@@ -4,17 +4,15 @@
       <span class="course-days-email">Email</span>
       <span class="course-days-firstName">Imię </span>
       <span class="course-days-lastName">Nazwisko</span>
-      <span class="course-days-startTime">Czas ropoczęcia</span>
-      <span class="course-days-stopButton">Zatrzymaj</span>
+      <span class="course-days-stopButton">Usuń</span>
     </mat-list-item>
-    <mat-list-item *ngFor="let presence of activePresences" class="course-days-item">
-      <span class="course-days-email">{{ presence.user.email }}</span>
-      <span class="course-days-firstName">{{ presence.user.firstName }}</span>
-      <span class="course-days-lastName">{{ presence.user.lastName}}</span>
-      <span class="course-days-startTime">{{ presence.startTime | date:'shortTime' }}</span>
-      <button mat-button color="primary" class="course-days-stopButton" (click)="endPresence(presence)">Zatrzymaj</button>
+    <mat-list-item *ngFor="let presence of activePresences?.presentUsers" class="course-days-item">
+      <span class="course-days-email">{{ presence.email }}</span>
+      <span class="course-days-firstName">{{ presence.firstName }}</span>
+      <span class="course-days-lastName">{{ presence.lastName}}</span>
+      <button mat-button color="primary" class="course-days-stopButton" (click)="endPresence(activePresences, presence)">Zatrzymaj</button>
     </mat-list-item>
-    <div *ngIf="activePresences && activePresences.length === 0" class="flex-container">
+    <div *ngIf="activePresences && activePresences.presentUsers.length === 0" class="flex-container">
       Nie ma obecnie aktywnych obecności
     </div>
   </mat-list>

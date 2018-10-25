@@ -52,9 +52,6 @@ const courseSchema = new Schema({
     },
     courseDays: [
         courseDaySchema
-    ],
-    usersPresences: [
-        presenceTimeSchema
     ]
 });
 

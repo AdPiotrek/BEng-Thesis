@@ -8,6 +8,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { AlertService } from '../../../core/services/alert.service';
 import { of } from 'rxjs/internal/observable/of';
 import { throwError } from 'rxjs/internal/observable/throwError';
+import { CourseDay } from '../../../core/models/course-day';
 
 @Component({
   selector: 'app-user-presence-toggle',
@@ -16,8 +17,8 @@ import { throwError } from 'rxjs/internal/observable/throwError';
 })
 export class UserPresenceToggleComponent implements OnInit {
 
-  activePresence$: Observable<UserPresence>;
-  activePresence: UserPresence;
+  activePresence$: Observable<CourseDay>;
+  activePresence: CourseDay;
 
   constructor(private userPresence: UserPresenceService,
               private userService: UserService,
@@ -32,7 +33,7 @@ export class UserPresenceToggleComponent implements OnInit {
   getActivePresence() {
     this.activePresence$ = this.userPresence.hasActivePresence(this.userService.loggedUser._id, this.courseService.choosedCourse._id)
       .pipe(
-        tap((userPresence: UserPresence) => {
+        tap((userPresence: CourseDay) => {
           console.log(userPresence)
           this.activePresence = userPresence;
         })
@@ -48,21 +49,6 @@ export class UserPresenceToggleComponent implements OnInit {
           return of(null)
         })
       ).subscribe()
-  }
-
-  endPresence() {
-    return this.userPresence.endPresence(this.courseService.choosedCourse._id, this.activePresence)
-      .pipe(
-        tap(() => {}),
-        catchError((err) => {
-          console.log(err);
-          this.alertService.newAlert('Nie udało się zakończyć obecności, została zakończona automatycznie lub przez instruktora', 'danger', 5000);
-          return throwError(null)
-        })
-      ).subscribe(() => {
-          this.activePresence = null;
-          this.activePresence$ = of(null);
-      })
   }
 
   refreshContent() {

@@ -1,19 +1,11 @@
 <div class="u-main-container toggle-presence">
-  <div *ngIf="(activePresence$ | async) as presence; else disactive" class="presence-disactive">
-    <div class="presence-disactive-description">
-      <div class="info-wrapper">
-        <span class="presence-disactive-description-heading">Jesteś obceny od:</span>
-        <div> {{ presence.startTime | date:'medium' }}</div>
-      </div>
-      <div class="info-wrapper">
-        <div class="presence-disactive-description-heading"> Zakończenie o:</div>
-        <div> {{ presence.plannedEnding | date:'medium'}}</div>
-      </div>
+  <div *ngIf="(activePresence$ | async) as presence; else disactive" class="presence-active">
+    <div>
+      Jesteś obecny na kursie od {{presence.startTime | date:'shortTime'}} do {{presence.endTime | date:'shortTime'}} w dniu {{presence.startTime | date: 'shortDate'}}
     </div>
-    <a mat-button-warn mat-raised-button color="warn" class="btn-end" (click)="endPresence()">Zakończ</a>
   </div>
   <ng-template class="presence-active" #disactive>
-    <div>Obecnie żadna obecność nie jest aktywowana</div>
+    <div>Obecnie obecność nie jest aktywowana</div>
     <a mat-button class="btn-start" (click)="startPresence()">Rozpocznij</a>
   </ng-template>
 </div>

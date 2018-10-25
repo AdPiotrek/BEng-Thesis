@@ -86,18 +86,6 @@ router.put('/course/:id/delete/user/:userId', async (req, res, next) => {
 router.put('/course/:id/coursedays', (req, res, next) => {
 });
 
-router.put('/course/:id/endPresence/:presenceId', async (req, res, next) => {
-    let course = await Course.findById(req.params['id']);
-    const presence = course.usersPresences.id(req.params['presenceId']);
-    if(!presence.isActive) {
-        res.status('404').send({message: 'Podana obecność została wcześniej zakończona'})
-    }
-    presence.isActive = false;
-    presence.endDate = new Date();
-    course = await course.save();
-    res.send(course)
-});
-
 router.put('/course/:id/presence', async (req, res, next) => {
     let course = await Course.findById(req.params['id']);
     let presence = await course.usersPresences.id(req.body.presence._id);
@@ -108,30 +96,19 @@ router.put('/course/:id/presence', async (req, res, next) => {
 });
 
 router.put('/course/:id/presences/:userId', async (req, res, next) => {
-    const course = await Course.findById(req.params['id']);
-    course.usersPresences = course.usersPresences.filter(presence => {
-        return !presence.user.equals(req.params['userId'])
-    });
+    const course = await Course.findOne({'courseDays._id': req.body.courseDay._id});
 
-    let newPresences = req.body;
+    console.log(course)
 
-    newPresences.map((presence) => {
-        return {
-            ...presence,
-            plannedEnding: presence.endTime
-        }
-    });
+    let courseDay = course.courseDays.id(req.body.courseDay._id);
 
-    course.usersPresences = [...course.usersPresences, ...newPresences];
+    courseDay.presentUsers = courseDay.presentUsers.filter(id => id.equals(req.params['userId']));
 
     await course.save();
-    res.send(course);
+
+    res.send(courseDay)
+
 });
-
-
-
-
-
 
 module.exports = router;
 
