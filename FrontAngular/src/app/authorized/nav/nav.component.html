@@ -54,7 +54,11 @@
           Obecnie aktywowane obecności
         </a>
       </mat-list-item>
-
+      <mat-list-item *ngIf="hasInstructorAccess()">
+        <a routerLink="/courses/edit">
+          Edytuj kurs
+        </a>
+      </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>

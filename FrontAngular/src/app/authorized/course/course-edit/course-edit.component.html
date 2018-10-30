@@ -1,0 +1,75 @@
+<mat-tab-group>
+  <mat-tab label="Dane">
+    <div class="add-course-container">
+      <div class="flex-container">
+        <form  [formGroup]="courseCreatingForm" (ngSubmit)="updateCourseData()">
+          <mat-form-field>
+            <input matInput placeholder="Nazwa kursu" formControlName="name">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Klucz do kursu" type="password" formControlName="key">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="startPicker" placeholder="Data rozpoczęcia kursu" formControlName="startDate" [matDatepickerFilter]="startDateFilter.bind(this)">
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="endPicker" placeholder="Data zakończenia kursu" formControlName="endDate" [matDatepickerFilter]="endDateFilter.bind(this)" >
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Liczba jednostek" type="number" formControlName="partsCount">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Czas lekcji" type="time" formControlName="lessonTime">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Czas przerwy" type="time" formControlName="breakTime">
+          </mat-form-field>
+          <button mat-button color="primary">Uaktualnij kurs</button>
+        </form>
+      </div>
+    </div>
+  </mat-tab>
+  <mat-tab label="Dni">
+    <form [formGroup]="courseDayForm" class="course-days-form">
+      <mat-form-field>
+        <input matInput [matDatepicker]="courseDayPicker" placeholder="Dzień kursu" formControlName="day">
+        <mat-datepicker-toggle matSuffix [for]="courseDayPicker"></mat-datepicker-toggle>
+        <mat-datepicker #courseDayPicker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Liczba jednostek" type="number" formControlName="partsCount">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Czas startu" type="time" formControlName="startTime">
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput placeholder="Czas zakończenia" type="time" formControlName="endTime"  readonly>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="addCourseDay()" [disabled]="courseDayForm.invalid">Dodaj dzień kursu!</button>
+      <span>Dni kursu</span>
+      <ng-container *ngIf="courseDays && courseDays.length > 0; else noCourses">
+        <ul>
+          <li *ngFor="let day of courseDays" class="course-day">
+            <div>
+              {{ day.startTime | date:'shortDate' }}
+              {{ day.startTime | date:'shortTime' }} -
+              {{ day.endTime | date:'shortTime' }}
+            </div>
+            <div class="delete-button" (click)="deletePresence(day)">
+              <mat-icon>close</mat-icon>
+            </div>
+          </li>
+        </ul>
+      </ng-container>
+      <ng-template #noCourses>
+        Dodaj dni kursu !
+      </ng-template>
+    </form>
+  </mat-tab>
+</mat-tab-group>
+
+

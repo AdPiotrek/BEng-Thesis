@@ -1,49 +1,84 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CourseRestService } from '../services/course-rest.service';
-import { Course } from '../../../core/models/course';
-import { CourseDay } from '../../../core/models/course-day';
 import { AlertService } from '../../../core/services/alert.service';
 import { endTimeValidator } from '../../../shared/validators/end-time-validator';
+import { CourseService } from '../../user/services/course.service';
+import { CourseDay } from '../../../core/models/course-day';
+import { of } from 'rxjs/internal/observable/of';
+import { merge } from 'rxjs/index';
+import { Moment } from 'moment';
 import { combineLatest, map, tap } from 'rxjs/operators';
 import * as moment from 'moment'
-import { Moment } from 'moment';
-import { merge } from 'rxjs';
-import { of } from 'rxjs/internal/observable/of';
 
 @Component({
-  selector: 'app-add-course',
-  templateUrl: './add-course.component.html',
-  styleUrls: ['./add-course.component.scss']
+  selector: 'app-course-edit',
+  templateUrl: './course-edit.component.html',
+  styleUrls: ['./course-edit.component.scss']
 })
-export class AddCourseComponent implements OnInit {
+export class CourseEditComponent implements OnInit {
+
   courseCreatingForm: FormGroup;
   courseDayForm: FormGroup;
-  courseDays: Array<CourseDay> = [];
+  courseDays: CourseDay[];
+  courseDayFilter = (day: Date): boolean => {
+    let minDate: number | Date = 0, maxDate: number | Date = 0;
+    this.courseService.choosedCourse.courseDays.forEach((courseDate) => {
+      minDate = minDate < courseDate.startTime ? courseDate.startTime : minDate;
+      maxDate = maxDate > courseDate.endTime ? courseDate.endTime : maxDate;
+    })
+
+
+    return day.valueOf() > minDate && day.valueOf() < maxDate;
+
+  };
 
   startDateFilter = (day: Date): boolean => {
-    return day >= this.courseCreatingForm.value['startDate']
+
+    let minDate: any = 0;
+    this.courseService.choosedCourse.courseDays.forEach((courseDate) => {
+      minDate = minDate < Date.parse(<any>courseDate.startTime) ? Date.parse(<any>courseDate.startTime) : minDate;
+    });
+
+    return day.valueOf() <= Date.parse(this.courseCreatingForm.value['endDate']) && day.valueOf() <= minDate
+  };
+
+  endDateFilter = (day: Date): boolean => {
+
+    let maxDate: any = Number.MAX_SAFE_INTEGER;
+    this.courseService.choosedCourse.courseDays.forEach((courseDate) => {
+      maxDate = maxDate > Date.parse(<any>courseDate.endTime) ? Date.parse(<any>courseDate.endTime) : maxDate;
+    });
+    return day.valueOf() >= Date.parse(this.courseCreatingForm.value['startDate']) && day.valueOf() >= maxDate;
   };
 
   constructor(public fb: FormBuilder,
               public courseRest: CourseRestService,
+              public courseService: CourseService,
               public alertService: AlertService) {
-    this.createCourseCreatingForm();
     this.createCourseDayForm();
+    this.createCourseCreatingForm();
   }
 
+
+
   ngOnInit() {
+    this.courseCreatingForm.patchValue(this.courseService.choosedCourse);
+    this.courseDays = this.courseService.choosedCourse.courseDays;
+
     const timeValueChange = merge(
       this.courseCreatingForm.valueChanges,
-      of({...this.courseCreatingForm.value})
+      of({ ...this.courseCreatingForm.value })
     );
 
     this.courseCreatingForm.valueChanges.pipe(
-      tap((value) => {
+      tap(() => {
         this.courseDays.forEach((courseDay) => {
 
-          let { lessonTime, breakTime } = value;
           const { partsCount } = courseDay;
+
+          let lessonTime: any = this.courseService.choosedCourse.lessonTime;
+          let breakTime: any = this.courseService.choosedCourse.breakTime;
 
           lessonTime = this.getTimeFromInput(lessonTime);
           breakTime = this.getTimeFromInput(breakTime);
@@ -53,7 +88,7 @@ export class AddCourseComponent implements OnInit {
 
           let momentObject = moment(courseDay.startTime);
 
-          momentObject.add(partsCount * (lessonTime + breakTime), 'minutes');
+          momentObject.add(<any>partsCount * (lessonTime + breakTime), 'minutes');
 
           courseDay.endTime = momentObject.toDate();
         })
@@ -65,13 +100,17 @@ export class AddCourseComponent implements OnInit {
       map(([value, formValue]) => {
         const time = this.getTimeFromInput(value);
         const momentObject: Moment = moment().hour(+time.hours).minutes(+time.minutes);
-        let { lessonTime, breakTime } = formValue;
+        let lessonTime, breakTime;
         const partsCount = this.courseDayForm.value.partsCount;
+        lessonTime = this.courseService.choosedCourse.lessonTime;
+        breakTime = this.courseService.choosedCourse.breakTime;
+
         lessonTime = this.getTimeFromInput(lessonTime);
         breakTime = this.getTimeFromInput(breakTime);
 
         lessonTime = +lessonTime.hours * 60 + +lessonTime.minutes;
         breakTime = +breakTime.hours * 60 + +breakTime.minutes;
+
 
         momentObject.add(partsCount * (lessonTime + breakTime), 'minutes');
         if (+momentObject.hours() < +time.hours) {
@@ -106,6 +145,20 @@ export class AddCourseComponent implements OnInit {
     }, { validator: endTimeValidator });
   }
 
+  updateCourseData() {
+    this.courseRest.updateCourse(this.courseService.choosedCourse._id, this.courseCreatingForm.value)
+      .subscribe((course) => {
+          this.courseService.changeChoosedCourse(course);
+          this.courseDays = course.courseDays;
+          this.alertService.newAlert('Kurs uaktualniony')
+
+        },
+        (err) => {
+          this.alertService.newAlert('Wystąpił nieoczekiwany błąd, spróbuj ponownie później', 'danger')
+        }
+      )
+  }
+
   addCourseDay(): void {
     const courseDay: CourseDay = this.createCourseDay();
     if (!this.isCourseDayInsideCourseDays(courseDay)) {
@@ -128,32 +181,6 @@ export class AddCourseComponent implements OnInit {
     this.courseDays.push(courseDay);
   }
 
-  addCourse() {
-    const course: Course = {
-      ...this.courseCreatingForm.value,
-      courseDays: [...this.courseDays]
-    };
-    this.courseRest.addCourse(course)
-      .subscribe(
-        (x) => {
-          this.courseCreatingForm.reset();
-          this.courseDayForm.reset();
-          this.courseDays = [];
-          this.alertService.newAlert('Kurs został dodany pomyślnie')
-        },
-        (err) => {
-          this.alertService.newAlert(err.error.message, 'danger')
-        }
-      );
-  }
-
-  getTimeFromInput(time: string): { hours: string, minutes: string } {
-    return {
-      hours: time.slice(0, 2),
-      minutes: time.slice(3, 5)
-    };
-  }
-
   isCourseDayAlreadyAdded(courseDay: CourseDay): boolean {
     return this.courseDays.some(day => {
       return day.startTime <= courseDay.endTime && day.endTime >= courseDay.startTime
@@ -174,8 +201,8 @@ export class AddCourseComponent implements OnInit {
   }
 
   isCourseDayInsideCourseDays(courseDay: CourseDay): boolean {
-    let courseStartDate = this.courseCreatingForm.get('startDate').value;
-    let courseEndDate = this.courseCreatingForm.get('endDate').value;
+    let courseStartDate = Date.parse(<any>this.courseService.choosedCourse.startDate);
+    let courseEndDate =Date.parse(<any>this.courseService.choosedCourse.endDate);
 
     if (typeof courseStartDate === 'object') {
       courseStartDate = Date.parse(courseStartDate)
@@ -191,4 +218,23 @@ export class AddCourseComponent implements OnInit {
     this.courseDays = this.courseDays.filter((day) => day !== courseDay)
   }
 
+  getTimeFromInput(time: string): { hours: string, minutes: string } {
+    return {
+      hours: time.slice(0, 2),
+      minutes: time.slice(3, 5)
+    };
+  }
+
+  updateCourseDays() {
+    this.courseRest.updateCourseDays(this.courseService.choosedCourse._id, this.courseDays)
+      .subscribe((course) => {
+          this.courseService.changeChoosedCourse(course);
+          this.courseDays = course.courseDays;
+          this.alertService.newAlert('Kurs uaktualniony')
+        },
+        (err) => {
+          this.alertService.newAlert('Wystąpił nieoczekiwany błąd, spróbuj ponownie później', 'danger')
+        }
+      )
+  }
 }

@@ -32,7 +32,19 @@ export class CourseRestService {
     return this.http.get<CourseDay>(`${environment.restApiUrl}/courses/${courseId}/active-presences`)
   }
 
+  getCourseDays(courseId: string) {
+    return this.http.get<CourseDay[]>(`${environment.restApiUrl}/courses/${courseId}/courseDays`)
+  }
+
   getPresences(courseId: string) {
     return this.http.get<UserPresence[]>(`${environment.restApiUrl}/courses/${courseId}/presences`)
+  }
+
+  updateCourse(courseId: string, course: Course) {
+    return this.http.put<Course>(`${environment.restApiUrl}/instructor/course/${courseId}`, {course})
+  }
+
+  updateCourseDays(courseId: string, courseDays: CourseDay[]) {
+    return this.http.put<Course>(`${environment.restApiUrl}/instructor/course/${courseId}`, {courseDays})
   }
 }

@@ -1,21 +1,29 @@
-.course-days-form {
+.example-table-container {
+  position: relative;
+  overflow: auto;
+  min-width: 700px;
+}
 
-  min-width: 400px;
-  display: flex;
-  justify-items: center;
-  align-items: center;
-  flex-direction: column;
-  & > * {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+.table-button {
+  width: 100%;
+}
+
+.action-header-cell {
+  text-align: center;
+  max-width: 100px;
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-cell {
+  color: #f6685e;
+}
+
+.userWasPresented {
+  .mat-cell {
+    color: #6fbf73;
   }
-}
-
-.delete-button {
-  margin-left: auto;
-}
-
-.presence {
-  display: flex;
 }

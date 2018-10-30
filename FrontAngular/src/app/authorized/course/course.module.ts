@@ -19,6 +19,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CourseDayPipe } from '../../core/course-day.pipe';
 import { SignToCourseDialogComponent } from './sign-to-course-dialog/sign-to-course-dialog.component';
+import { CourseEditComponent } from './course-edit/course-edit.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { SignToCourseDialogComponent } from './sign-to-course-dialog/sign-to-cou
     CoursesListComponent,
     CourseListItemComponent,
     CourseDayPipe,
-    SignToCourseDialogComponent
+    SignToCourseDialogComponent,
+    CourseEditComponent
   ],
   providers: [
     DatePipe

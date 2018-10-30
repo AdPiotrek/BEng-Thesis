@@ -52,17 +52,6 @@ router.get('/:id/courses', (req, res, next) => {
 });
 
 router.get('/:id/presences/:courseId', async (req, res, next) => {
-    // User.getUserById(req.params['id'])
-    //     .populate('courses')
-    //     .then((user) => {
-    //         const course = user.courses.find((course) => course._id.toString() === req.params['courseId']);
-    //
-    //         const presences = course.courseDays.filter((presence) => {
-    //             return presence.user.toString() === req.params['id']
-    //         });
-    //
-    //         return res.send(presences)
-    //     })
 
     const course = await Course.findById(req.params['courseId']);
 

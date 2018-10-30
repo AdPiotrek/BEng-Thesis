@@ -1,8 +1,8 @@
 import { User } from './user';
 
 export interface CourseDay {
-  startTime: Date | number;
-  endTime: Date | number;
+  startTime:  number| Date;
+  endTime: number | Date;
   partsCount: number;
   presentUsers?: User[]
 }

@@ -10,6 +10,7 @@ import { UserPresence } from '../../../core/models/user-presence';
 import { UserPresenceService } from '../services/user-presence.service';
 import * as jsPDF from 'jspdf';
 import * as moment from 'moment'
+import { CourseDay } from '../../../core/models/course-day';
 
 @Component({
   selector: 'app-user-presence-list',
@@ -18,8 +19,8 @@ import * as moment from 'moment'
 })
 export class UserPresenceListComponent implements OnInit {
 
-  userPresences$: Observable<UserPresence[]>;
-  userPresences: UserPresence[];
+  userPresences$: Observable<CourseDay[]>;
+  userPresences: CourseDay[];
 
   @ViewChild('pdfContent') pdfContent: ElementRef;
 

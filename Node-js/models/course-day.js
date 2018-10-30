@@ -13,7 +13,10 @@ const courseDaySchema = new Schema({
     },
     presentUsers: [{
         type: Schema.Types.ObjectId,
-    }]
+    }],
+    partsCount: {
+        type: [Number]
+    }
 });
 
 module.exports = courseDaySchema;

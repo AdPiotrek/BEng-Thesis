@@ -26,8 +26,12 @@ export class UserPresenceService {
     return this.http.get<CourseDay>(`${environment.restApiUrl}/users/${userId}/activePresence/${courseId}`);
   }
 
-  deletePresences(courseId: string, userId: string, courseDay) {
-    return this.http.put(`${environment.restApiUrl}/instructor/course/${courseId}/presences/${userId}`,{courseDay})
+  markPresenceActive(userId: string, courseId: string, courseDay: CourseDay) {
+    return this.http.put(`${environment.restApiUrl}/instructor/course/${courseId}/start-presence/${userId}`, {courseDay})
+  }
+
+  deletePresences(userId: string, courseId: string, courseDay: CourseDay) {
+    return this.http.put(`${environment.restApiUrl}/instructor/course/${courseId}/delete-presence/${userId}`,{courseDay})
   }
 
 }

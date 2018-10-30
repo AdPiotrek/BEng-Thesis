@@ -1,16 +1,16 @@
 <div class="flex-container mat-elevation-z8">
   <div class="example-loading-shade"
-       *ngIf="isLoadingResults || isRateLimitReached">
+       *ngIf="isLoadingResults || data && data.length === 0">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
-    <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-      Błąd ładowania, spróbuj ponwonie później
+    <div class="example-rate-limit-reached" *ngIf="data && data.length === 0">
+      Nie ma jeszcze dodanych użytkowników
     </div>
   </div>
 
   <div class="example-table-container">
-
     <table mat-table [dataSource]="data" class="example-table"
-           matSort matSortActive="email" matSortDisableClear matSortDirection="asc">
+           matSort matSortActive="email" matSortDisableClear matSortDirection="asc"
+    >
       <ng-container matColumnDef="index">
         <th mat-header-cell *matHeaderCellDef>#</th>
         <td mat-cell *matCellDef="let i = index">{{ i + 1 }}</td>
@@ -18,7 +18,9 @@
 
       <ng-container matColumnDef="email">
         <th mat-header-cell *matHeaderCellDef>Email</th>
-        <td mat-cell *matCellDef="let row ">{{ row.email }}</td>
+        <td mat-cell *matCellDef="let row ">
+          {{ row.email }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="firstName">
@@ -31,20 +33,23 @@
         <td mat-cell *matCellDef="let row">{{ row.lastName }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="delete" >
+      <ng-container matColumnDef="delete">
         <th mat-header-cell *matHeaderCellDef class="action-header-cell">Usuń</th>
-        <td mat-cell *matCellDef="let row " (click)="openDialog(row._id)"><button mat-button color="danger" class="table-button">Usuń</button></td>
+        <td mat-cell *matCellDef="let row " (click)="openDialog(row._id)">
+          <button mat-button color="danger" class="table-button">Usuń</button>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="edit">
         <th mat-header-cell *matHeaderCellDef class="action-header-cell">Obecności</th>
-        <td mat-cell *matCellDef="let row " (click)="editUserPresence(row._id)"><button mat-button color="primary" class="table-button">Edytuj</button></td>
+        <td mat-cell *matCellDef="let row " (click)="editUserPresence(row._id)">
+          <button mat-button color="primary" class="table-button">Edytuj</button>
+        </td>
       </ng-container>
-
-
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
+
     </table>
   </div>
 

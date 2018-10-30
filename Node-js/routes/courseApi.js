@@ -139,4 +139,9 @@ router.get('/:id/presences', async (req, res, next) => {
     res.send(course.courseDays.presentUsers)
 });
 
+router.get('/:id/courseDays', async (req, res, next) => {
+    const course = await Course.findById(req.params.id);
+    res.send(course.courseDays)
+});
+
 module.exports = router;
