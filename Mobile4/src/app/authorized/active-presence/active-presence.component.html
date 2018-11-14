@@ -1,0 +1,23 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Aktywne Obecności</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content>
+    <ion-list>
+        <ng-container *ngFor="let presence of activePresences?.presentUsers">
+            <ion-item lines="none">Email: {{presence.email}}</ion-item>
+            <ion-item lines="none">Imię: {{presence.firstName}}</ion-item>
+            <ion-item lines="none">Nazwisko: {{presence.lastName}}</ion-item>
+            <ion-item>
+                <ion-button slot="end" (click)="endPresence(activePresences, presence)">Zatrzymaj</ion-button>
+            </ion-item>
+        </ng-container>
+        <ion-item *ngIf="!activePresences || activePresences?.presentUsers.length === 0">
+            <ion-label>Nie ma obecnie aktywnych obecności</ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

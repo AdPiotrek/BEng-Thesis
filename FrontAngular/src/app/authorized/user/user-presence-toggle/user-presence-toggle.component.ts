@@ -34,7 +34,6 @@ export class UserPresenceToggleComponent implements OnInit {
     this.activePresence$ = this.userPresence.hasActivePresence(this.userService.loggedUser._id, this.courseService.choosedCourse._id)
       .pipe(
         tap((userPresence: CourseDay) => {
-          console.log(userPresence)
           this.activePresence = userPresence;
         })
       )

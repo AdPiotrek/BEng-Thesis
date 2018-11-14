@@ -5,6 +5,7 @@ const User = require('../models/user');
 const router = express.Router();
 
 router.get('', (req, res, next) => {
+    console.log('perPage')
     let perPage = 10;
     let page = req.params['page'] > 0 ? req.params['page'] : 0;
     Course.find()

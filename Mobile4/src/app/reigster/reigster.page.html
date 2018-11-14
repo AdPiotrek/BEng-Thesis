@@ -1,0 +1,37 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Zarejestruj się!</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <form [formGroup]="registerForm" (ngSubmit)="registerUser()">
+        <ion-item>
+            <ion-input type="text" placeholder="Imię" formControlName="firstName"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="Nazwisko" formControlName="lastName"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-input type="text" placeholder="Email" formControlName="email"></ion-input>
+        </ion-item>
+        <p *ngIf="registerForm.controls.email.errors?.email && registerForm.controls.email.touched"
+           class="form-errors">Podany email ma nieprawidłowy format</p>
+        <ion-item>
+            <ion-input type="password" placeholder="Hasło" formControlName="password"></ion-input>
+        </ion-item>
+        <p *ngIf="registerForm.controls.password.errors?.minlength && registerForm.controls.password.touched"
+           class="form-errors">Hasło musi zawierać co najmniej 6 znaków</p>
+        <ion-item>
+            <ion-input type="password" placeholder="Powtórz hasło" formControlName="confirmedPassword"></ion-input>
+        </ion-item>
+        <p *ngIf="registerForm.errors?.isSamePassword && registerForm.controls.confirmedPassword.touched"
+           class="form-errors">Podane hasła nie są takie same</p>
+        <ion-item>
+            <ion-label>Konto instruktora</ion-label>
+            <ion-checkbox (ionChange)="roleChange($event)">Konto instruktora</ion-checkbox>
+        </ion-item>
+        <ion-button type="submit" class="form-button" [disabled]="registerForm.invalid">Zarejestruj się</ion-button>
+    </form>
+    <p>Masz konto ? <a routerLink="/login">Zaloguj się!</a></p>
+</ion-content>

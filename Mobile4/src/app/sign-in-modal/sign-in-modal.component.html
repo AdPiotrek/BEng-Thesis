@@ -1,0 +1,23 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="end" style="margin-right: 20px" size="large" (click)="closeModal()">
+            <ion-icon name="close"></ion-icon>
+        </ion-buttons>
+        <ion-title >
+            Zapisz się do kursu !
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <form [formGroup]="signInToCourseForm" (ngSubmit)="signInToCourse()">
+    <ion-item>
+      <ion-input type="password" placeholder="Hasło" formControlName="password"></ion-input>
+    </ion-item>
+    <p *ngIf="signInToCourseForm.controls.password.errors && signInToCourseForm.controls.password.touched"
+       class="form-errors">
+      Hasło musi mieć co najmniej
+      6 cyfr</p>
+    <ion-button type="submit" class="form-button" [disabled]="signInToCourseForm.invalid">Zapisz się !</ion-button>
+  </form>
+</ion-content>
+

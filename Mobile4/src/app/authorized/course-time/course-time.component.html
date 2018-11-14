@@ -1,0 +1,32 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Czas</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card (click)="startLesson()">
+        <ion-card-header>Czas lekcji</ion-card-header>
+        <ion-card-content>
+            <h5>{{leftOfLesson | secondsToTime}}</h5>
+            <ion-icon name="play"></ion-icon>
+        </ion-card-content>
+    </ion-card>
+    <ion-card>
+        <ion-card-header>Czas przerwy</ion-card-header>
+        <ion-card-content>
+            <h5>{{leftOfBreak | secondsToTime}}</h5>
+            <ion-icon name="play"></ion-icon>
+        </ion-card-content>
+    </ion-card>
+    <ion-item>
+        <ion-text>
+            Liczba wykonanych lekcji: {{realizedLessons}}
+        </ion-text>
+    </ion-item>
+    <ion-item>
+        <ion-text>
+            Liczba wykonanych przerw: {{realizedBreak}}
+        </ion-text>
+    </ion-item>
+</ion-content>

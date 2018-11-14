@@ -1,0 +1,27 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Zaloguj się!</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <form [formGroup]="loginForm" (ngSubmit)="signIn()">
+        <ion-item>
+            <ion-input type="email" matInput placeholder="Email" formControlName="email"></ion-input>
+        </ion-item>
+        <p *ngIf="loginForm.controls.email.errors?.email && loginForm.controls.email.touched"
+           class="form-errors">
+            Podany email ma nieprawidłowy format
+        </p>
+        <ion-item>
+            <ion-input type="password" matInput placeholder="Hasło" formControlName="password"></ion-input>
+        </ion-item>
+        <p *ngIf="loginForm.controls.password.errors&& loginForm.controls.password.touched"
+           class="form-errors">
+            Hasło musi mieć co najmniej
+            6 cyfr</p>
+        <ion-button type="submit" class="form-button" [disabled]="loginForm.invalid">Zaloguj</ion-button>
+    </form>
+
+    {{e | json}}
+</ion-content>

@@ -4,6 +4,10 @@ const dbConfig = require('../config/database');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+router.get('/404', (req,res,next) => {
+    req.status(404).send();
+})
+
 router.post('/register', (req, res, next) => {
     const newUser = new User(req.body);
     User.addUser(newUser)
@@ -22,6 +26,7 @@ router.post('/register', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
+    console.log('login')
     let fetchedUser;
     User.getUserByEmail(req.body.email)
         .then((user) => {
