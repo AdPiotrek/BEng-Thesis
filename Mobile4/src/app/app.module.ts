@@ -35,7 +35,8 @@ import {LocalNotifications} from "@ionic-native/local-notifications/ngx";
         ActivePresenceComponent,
         TogglePresenceComponent,
         CourseTimeComponent,
-        SecondsToTimePipe
+        SecondsToTimePipe,
+
     ],
     entryComponents: [
         SignInModalComponent

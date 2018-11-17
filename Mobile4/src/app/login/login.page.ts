@@ -34,13 +34,16 @@ export class LoginPage implements OnInit {
     }
 
     signIn() {
+        console.log('SignInserved')
         this.authService.login(this.loginForm.value)
             .subscribe(
                 async (user: User) => {
+                    alert
                     this.userService.loggedUser = {...user};
                     this.router.navigate(['course-list'])
                 },
                 async (err) => {
+                    alert(JSON.stringify(err));
                     let toast = await this.toastController.create({
                         message: 'Niepoprawny email lub hasło, spróbuj ponownie',
                         position: "top",
