@@ -1,0 +1,19 @@
+.timer-content {
+  display: flex;
+  justify-content: space-between;
+  color: black;
+  align-items: center;
+}
+
+.icon-container {
+  padding: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  border: 2px solid black;
+  ion-icon.play {
+    position: relative;
+    left: 2px;
+  }
+}

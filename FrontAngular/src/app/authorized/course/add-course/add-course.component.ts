@@ -10,6 +10,8 @@ import * as moment from 'moment'
 import { Moment } from 'moment';
 import { merge } from 'rxjs';
 import { of } from 'rxjs/internal/observable/of';
+import {Router} from "@angular/router";
+import {UserService} from "../../../core/services/user.service";
 
 @Component({
   selector: 'app-add-course',
@@ -27,7 +29,9 @@ export class AddCourseComponent implements OnInit {
 
   constructor(public fb: FormBuilder,
               public courseRest: CourseRestService,
-              public alertService: AlertService) {
+              public alertService: AlertService,
+              public router: Router,
+              public userService: UserService) {
     this.createCourseCreatingForm();
     this.createCourseDayForm();
   }
@@ -139,7 +143,8 @@ export class AddCourseComponent implements OnInit {
           this.courseCreatingForm.reset();
           this.courseDayForm.reset();
           this.courseDays = [];
-          this.alertService.newAlert('Kurs został dodany pomyślnie')
+          this.alertService.newAlert('Kurs został dodany pomyślnie');
+          this.router.navigateByUrl(`u/${this.userService.loggedUser._id}/courses`)
         },
         (err) => {
           this.alertService.newAlert(err.error.message, 'danger')
@@ -190,5 +195,7 @@ export class AddCourseComponent implements OnInit {
   deletePresence(courseDay) {
     this.courseDays = this.courseDays.filter((day) => day !== courseDay)
   }
+
+
 
 }

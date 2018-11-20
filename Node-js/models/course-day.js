@@ -15,7 +15,7 @@ const courseDaySchema = new Schema({
         type: Schema.Types.ObjectId,
     }],
     partsCount: {
-        type: [Number]
+        type: Number
     }
 });
 

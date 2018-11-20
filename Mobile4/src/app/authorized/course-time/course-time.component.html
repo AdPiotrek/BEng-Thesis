@@ -1,32 +1,77 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title>Czas</ion-title>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Kontroluj czas</ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content>
-    <ion-card (click)="startLesson()">
-        <ion-card-header>Czas lekcji</ion-card-header>
+    <ion-list>
+        <ion-item>
+            Obecnie wybrany dzień: {{courseDay?.startTime | date : 'shortDate'}}
+        </ion-item>
+        <ion-item>
+            <ion-label>Dni kursu</ion-label>
+            <ion-select ok-text="Potwierdź" cancel-text="Anuluj" [(ngModel)]="courseDay" (ionChange)="handleSelectChange()">
+                <ion-select-option *ngFor="let courseDayy of courseDays" [value]="courseDayy">
+                    {{courseDayy.startTime | date: 'mediumDate'}}
+                </ion-select-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>
+                Czas lekcji
+            </ion-card-title>
+        </ion-card-header>
         <ion-card-content>
-            <h5>{{leftOfLesson | secondsToTime}}</h5>
-            <ion-icon name="play"></ion-icon>
+            <div class="timer-content">
+                <h1>Pozostało: {{leftOfLesson | secondsToTime}}</h1>
+                <div class="icon-container">
+                    <ion-icon *ngIf="!isLessonActive" name="play" size="large" (click)="startLesson()"
+                              class="play"></ion-icon>
+                    <ion-icon *ngIf="isLessonActive" name="pause" size="large" (click)="endLesson()"></ion-icon>
+                </div>
+            </div>
         </ion-card-content>
     </ion-card>
     <ion-card>
-        <ion-card-header>Czas przerwy</ion-card-header>
+        <ion-card-header>
+            <ion-card-title>
+                Czas przerwy
+            </ion-card-title>
+        </ion-card-header>
         <ion-card-content>
-            <h5>{{leftOfBreak | secondsToTime}}</h5>
-            <ion-icon name="play"></ion-icon>
+            <div class="timer-content">
+                <h1>Pozostało: {{leftOfBreak | secondsToTime}}</h1>
+                <div class="icon-container">
+                    <ion-icon *ngIf="!isBreakActive" name="play" size="large" (click)="startBreak()"
+                              class="play"></ion-icon>
+                    <ion-icon *ngIf="isBreakActive" name="pause" size="large" (click)="endBreak()"></ion-icon>
+                </div>
+            </div>
         </ion-card-content>
     </ion-card>
     <ion-item>
         <ion-text>
-            Liczba wykonanych lekcji: {{realizedLessons}}
+            <h3>Łączna ilość jednostek kursu: {{courseDay?.partsCount}}</h3>
         </ion-text>
     </ion-item>
     <ion-item>
         <ion-text>
-            Liczba wykonanych przerw: {{realizedBreak}}
+            <h3>
+                Liczba wykonanych lekcji: {{realizedLessons}}
+            </h3>
+        </ion-text>
+    </ion-item>
+    <ion-item>
+        <ion-text>
+            <h3>
+                Liczba wykonanych przerw: {{realizedBreak}}
+            </h3>
         </ion-text>
     </ion-item>
 </ion-content>

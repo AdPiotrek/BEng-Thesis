@@ -9,6 +9,7 @@ import {MyCourseListComponent} from "./authorized/my-course-list/my-course-list.
 import {TogglePresenceComponent} from "./authorized/toggle-presence/toggle-presence.component";
 import {ActivePresenceComponent} from "./authorized/active-presence/active-presence.component";
 import {CourseTimeComponent} from "./authorized/course-time/course-time.component";
+import {ManagePresencesGuard} from "./core/guards/manage-presences.guard";
 
 const routes: Routes = [
     {path: '', redirectTo: 'register', pathMatch: 'full'},
@@ -18,9 +19,9 @@ const routes: Routes = [
         path: '', component: AuthorizedComponent, canActivate: [AuthGuard], children: [
             {path: 'course-list', component: CourseListComponent},
             {path: 'my-courses', component: MyCourseListComponent},
-            {path: 'user-presence', component: TogglePresenceComponent},
-            {path: 'active-presence', component: ActivePresenceComponent},
-            {path: 'time-control', component: CourseTimeComponent}
+            {path: 'user-presence', component: TogglePresenceComponent, canActivate: [ManagePresencesGuard]},
+            {path: 'active-presence', component: ActivePresenceComponent, canActivate: [ManagePresencesGuard]},
+            {path: 'time-control', component: CourseTimeComponent, canActivate: [ManagePresencesGuard]}
         ]
     }
 ];

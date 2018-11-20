@@ -9,7 +9,7 @@ import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ReigsterPage} from "./reigster/reigster.page";
 import {LoginPage} from "./login/login.page";
 import {AuthorizedComponent} from "./authorized/authorized/authorized.component";
@@ -22,6 +22,7 @@ import { TogglePresenceComponent } from './authorized/toggle-presence/toggle-pre
 import { CourseTimeComponent } from './authorized/course-time/course-time.component';
 import { SecondsToTimePipe } from './shared/seconds-to-time.pipe';
 import {LocalNotifications} from "@ionic-native/local-notifications/ngx";
+import {IonicStorageModule} from "@ionic/storage";
 
 @NgModule({
     declarations: [
@@ -36,24 +37,26 @@ import {LocalNotifications} from "@ionic-native/local-notifications/ngx";
         TogglePresenceComponent,
         CourseTimeComponent,
         SecondsToTimePipe,
-
     ],
     entryComponents: [
         SignInModalComponent
     ],
     imports: [
         BrowserModule,
+        FormsModule,
         ReactiveFormsModule,
         IonicModule.forRoot(),
         AppRoutingModule,
         HttpClientModule,
+        IonicStorageModule.forRoot()
+
     ],
     providers: [
         StatusBar,
         SplashScreen,
         LocalNotifications,
         {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
-        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy}
+        {provide: RouteReuseStrategy, useClass: IonicRouteStrategy},
     ],
     bootstrap: [AppComponent]
 })

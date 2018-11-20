@@ -52,6 +52,9 @@ export class RegisterComponent implements OnInit {
       )
       .subscribe((user) => {
         this.userService.loggedUser = { ...user };
+        if(this.userService.loggedUser.role === 'instructor') {
+          this.router.navigate(['courses/add'])
+        }
         this.router.navigate(['courses']);
         this.alertService.newAlert('Rejestracja zakończona pomyślnie, zostałeś zalogowany', 'success', 5000)
       }, () => {

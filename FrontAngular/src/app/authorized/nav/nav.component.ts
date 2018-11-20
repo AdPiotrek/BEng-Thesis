@@ -16,10 +16,10 @@ export class NavComponent implements OnInit {
   choosedCourse: Observable<Course>;
   loggedUserId: string;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Web)
     .pipe(
       map(result => {
-        return result.matches;
+        return !result.matches;
       })
     );
 
@@ -35,7 +35,6 @@ export class NavComponent implements OnInit {
   }
 
   hasInstructorAccess(): boolean {
-    console.log()
     return this.userService.isInstructor();
   }
 

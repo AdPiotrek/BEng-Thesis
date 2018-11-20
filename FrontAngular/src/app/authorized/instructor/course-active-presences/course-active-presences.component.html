@@ -12,7 +12,7 @@
       <span class="course-days-lastName">{{ presence.lastName}}</span>
       <button mat-button color="primary" class="course-days-stopButton" (click)="endPresence(activePresences, presence)">Zatrzymaj</button>
     </mat-list-item>
-    <div *ngIf="activePresences && activePresences.presentUsers.length === 0" class="flex-container">
+    <div *ngIf="activePresences && activePresences.presentUsers.length === 0 || activePresences == null" class="flex-container">
       Nie ma obecnie aktywnych obecności
     </div>
   </mat-list>
