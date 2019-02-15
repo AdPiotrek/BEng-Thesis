@@ -19,5 +19,9 @@
   }
 }
 
+:host ::ng-deep .mat-tab-links {
+  min-width: 600px;
+}
+
 
 

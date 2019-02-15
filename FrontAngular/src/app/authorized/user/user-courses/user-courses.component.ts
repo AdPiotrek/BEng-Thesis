@@ -8,6 +8,7 @@ import { UserRestService } from '../services/user-rest.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { CourseService } from '../services/course.service';
 import { AlertService } from '../../../core/services/alert.service';
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-user-courses',
@@ -16,10 +17,9 @@ import { AlertService } from '../../../core/services/alert.service';
 })
 export class UserCoursesComponent implements OnInit {
 
-  displayedColumns: string[] = ['number', 'name', 'startDate', 'endDate', 'code'];
-  data: Course[] = [];
+  displayedColumns: string[] = ['number', 'name', 'startDate', 'endDate', 'code', 'status'];
+  data: Course[] = null;
   resultsLength = 0;
-  isLoadingResults = true;
   isRateLimitReached = false;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -28,27 +28,26 @@ export class UserCoursesComponent implements OnInit {
   constructor(private userRest: UserRestService,
               private route: ActivatedRoute,
               private courseService: CourseService,
-              private alertService: AlertService) {
+              private alertService: AlertService,
+             ) {
+
   }
 
   ngOnInit() {
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    this.paginator.page
+    merge(this.paginator.page, this.sort.sortChange)
       .pipe(
         startWith({}),
         switchMap(() => this.route.params),
         switchMap((params: Params) => {
-          this.isLoadingResults = true;
-          return this.userRest.getUserCourses(params['id']);
+          return this.userRest.getUserCourses(params['id'], this.paginator.pageIndex, this.sort.active, this.sort.direction || this.sort.start);
         }),
         map((data: Pagination<Course>) => {
-          this.isLoadingResults = false;
           this.isRateLimitReached = false;
           this.resultsLength = data.totalPageCount;
           return data.items;
         }),
         catchError(() => {
-          this.isLoadingResults = false;
           this.isRateLimitReached = true;
           return observableOf([]);
         })

@@ -9,22 +9,33 @@ import {SignInModalComponent} from "../../sign-in-modal/sign-in-modal.component"
     templateUrl: './course-list.component.html',
     styleUrls: ['./course-list.component.scss']
 })
-export class CourseListComponent implements OnInit {
-
+export class CourseListComponent {
+    firstEnter = true;
     courses: Course[] = [];
-    page: number = 1;
+    page: number = 0;
     allPages: number;
-
+    searchPhrase = '';
     constructor(private courseRest: CourseRestService,
                 private modalController: ModalController) {
     }
 
-    ngOnInit() {
+
+    searchCourse() {
+        this.page = 0;
+        this.courses = [];
         this.getCourses();
     }
 
+    ionViewWillEnter() {
+        console.log('[COURSE_LIST ON INIT]');
+        if (this.firstEnter) {
+            this.getCourses();
+        }
+    }
+
     getCourses() {
-        this.courseRest.getCourses(this.page++)
+        console.log(this.searchPhrase)
+        this.courseRest.getCourses(this.page++, this.searchPhrase)
             .subscribe(
                 (courses) => {
                     this.allPages = courses.totalPageCount;

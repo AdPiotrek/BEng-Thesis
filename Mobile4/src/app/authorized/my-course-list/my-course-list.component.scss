@@ -1,0 +1,24 @@
+.courseName {
+  font-weight: 700;
+  font-size: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.date {
+  padding-bottom: 10px;
+}
+
+ion-button {
+  padding-bottom: 10px;
+}
+
+.item-content {
+  width: 100%;
+}
+
+@media (min-width: 400px) {
+  .courseName {
+    font-size: 20px;
+  }
+}

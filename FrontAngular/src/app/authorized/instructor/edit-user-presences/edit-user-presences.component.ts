@@ -1,16 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { endTimeValidator } from '../../../shared/validators/end-time-validator';
 import { AlertService } from '../../../core/services/alert.service';
-import { UserPresence } from '../../../core/models/user-presence';
 import { ActivatedRoute } from '@angular/router';
 import { CourseService } from '../../user/services/course.service';
 import { UserPresenceService } from '../../user/services/user-presence.service';
 import { UserRestService } from '../../user/services/user-rest.service';
-import * as moment from 'moment';
 import { CourseRestService } from '../../course/services/course-rest.service';
 import { CourseDay } from '../../../core/models/course-day';
 import { switchMap, tap } from 'rxjs/operators';
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-edit-user-presences',
@@ -22,6 +19,7 @@ export class EditUserPresencesComponent implements OnInit {
   @ViewChild('pdf') pdfContent: ElementRef;
   displayedColumns: string[] = ['number', 'date','startDate', 'endDate', 'markPresence', 'deletePresence'];
   data: CourseDay[];
+  user$: Observable<any>;
 
   isLoadingResults = true;
   editedUserId: string;
@@ -30,8 +28,10 @@ export class EditUserPresencesComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private courseService: CourseService,
               private courseRestService: CourseRestService,
-              private userPresenceService: UserPresenceService) {
+              private userPresenceService: UserPresenceService,
+              private userService: UserRestService) {
     this.activatedRoute.params.subscribe((params) => {
+      this.user$ = this.userService.getUserById(params.id);
       return this.editedUserId = params['id'];
     })
   }
@@ -39,6 +39,7 @@ export class EditUserPresencesComponent implements OnInit {
   ngOnInit() {
     this.getUserPresences();
   }
+
 
   getUserPresences() {
     this.isLoadingResults = true;

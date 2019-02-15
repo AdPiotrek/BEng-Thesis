@@ -52,7 +52,10 @@ const courseSchema = new Schema({
     },
     courseDays: [
         courseDaySchema
-    ]
+    ],
+    status: {
+        type: String
+    }
 });
 
 const Course = mongoose.model('course', courseSchema);

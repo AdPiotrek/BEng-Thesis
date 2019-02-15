@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ToastController} from "@ionic/angular";
 import {Course} from "../../core/models/course";
 import {UserRestService} from "../../core/services/user-rest.service";
@@ -7,9 +7,9 @@ import {Pagination} from "../../core/models/pagination";
 import {CourseService} from "../../core/services/course.service";
 
 @Component({
-  selector: 'app-my-course-list',
-  templateUrl: './my-course-list.component.html',
-  styleUrls: ['./my-course-list.component.scss']
+    selector: 'app-my-course-list',
+    templateUrl: './my-course-list.component.html',
+    styleUrls: ['./my-course-list.component.scss']
 })
 export class MyCourseListComponent implements OnInit {
 
@@ -37,10 +37,10 @@ export class MyCourseListComponent implements OnInit {
     }
 
     async signIn(course: Course) {
-        this.courseService.choosedCourse = course;
+        this.courseService.changeChoosedCourse(course)
         let toast = await this.toastCtrl.create({
             message: 'Zostałeś zalogowany do kursu',
-            position: "top",
+            position: "bottom",
             duration: 3000
         });
 

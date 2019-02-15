@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
-import { Course } from '../../../core/models/course';
 import { CourseService } from '../services/course.service';
 
 @Component({
@@ -10,12 +8,19 @@ import { CourseService } from '../services/course.service';
 })
 export class UserPresenceAvailableDaysComponent implements OnInit {
 
-  choosedCourse: Observable<Course>;
+  displayedColumns = ['number', 'day', 'startTime', 'endTime', 'partsCount'];
+
+  availableDays;
 
   constructor(private courseService: CourseService) { }
 
   ngOnInit() {
-    this.choosedCourse = this.courseService.choosedCourse$;
+    this.availableDays = this.courseService.choosedCourse.courseDays.map(courseDay => {
+      return {
+        ...courseDay,
+        day: courseDay.startTime
+      }
+    });
   }
 
 

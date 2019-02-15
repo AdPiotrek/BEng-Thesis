@@ -6,6 +6,7 @@
   > * {
     width: 100%;
   }
+  position: relative;
 }
 
 tr.mat-row {
@@ -28,3 +29,22 @@ tr.mat-row {
 .mat-column-endDate {
   padding: 0 10px;
 }
+
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-rate-limit-reached {
+  color: #980000;
+  text-align: center;
+}
+

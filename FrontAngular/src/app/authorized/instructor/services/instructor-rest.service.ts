@@ -18,8 +18,8 @@ export class InstructorRestService {
     return this.http.put<Course>(`${environment.restApiUrl}/instructor/course/${courseId}/add/user`, { email: email })
   }
 
-  public getCourseUsers(courseId: string): Observable<Pagination<User>> {
-    return this.http.get<Pagination<User>>(`${environment.restApiUrl}/instructor/course/${courseId}/users`)
+  public getCourseUsers(courseId: string, page = 0, sort = 'name', direction = 'asc'): Observable<Pagination<User>> {
+    return this.http.get<Pagination<User>>(`${environment.restApiUrl}/instructor/course/${courseId}/users?page=${page}&sort=${sort}&direction=${direction}`)
   }
 
   public deleteUserFromCourse(courseId: string, userId: string) {

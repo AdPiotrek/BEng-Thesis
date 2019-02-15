@@ -37,7 +37,6 @@ export class CourseTimeComponent implements OnInit {
 
     async ngOnInit() {
         const timeObj = await this.storage.get('timeObj');
-        console.log(timeObj);
         if (timeObj && timeObj.courseId === this.courseService.choosedCourse._id) {
             console.log('setting course day')
             this.leftOfLesson = timeObj.leftOfLesson;
@@ -91,6 +90,7 @@ export class CourseTimeComponent implements OnInit {
     }
 
     async startLesson() {
+        this.endBreak();
         if(this.realizedLessons === this.courseDay.partsCount) {
             let alert = await this. alertController.create({
                 header: 'Informacja',
@@ -131,6 +131,8 @@ export class CourseTimeComponent implements OnInit {
     }
 
     async startBreak() {
+
+        this.endLesson();
 
         if(this.realizedBreak === this.courseDay.partsCount) {
             let alert = await this. alertController.create({

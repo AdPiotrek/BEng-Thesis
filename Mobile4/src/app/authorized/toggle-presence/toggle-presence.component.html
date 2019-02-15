@@ -10,15 +10,19 @@
 </ion-header>
 
 <ion-content>
-    <ion-item>
-        <div *ngIf="(activePresence$ | async) as presence; else disactive">
-            Jesteś obecny na zajęciach
-        </div>
-        <ng-template class="presence-active" #disactive>
-            <div>Obecnie obecność nie jest aktywowana</div>
-            <ion-button (click)="startPresence()">Rozpocznij</ion-button>
-        </ng-template>
-    </ion-item>
+    <h1 *ngIf="(activePresence$ | async) as presence; else disactive"
+        style="position: fixed;padding: 20px;top: 45%; transform: translateY(-50%)">
+        Jesteś obecny na zajęciach od {{presence.startTime | date:'dd/MM/yyyy HH:mm'}}
+        do {{presence.endTime | date:'dd/MM/yyyy HH:mm'}}
+    </h1>
+    <ng-template class="presence-active" #disactive>
+        <ion-card class="card">
+            <h1>Nie aktywowano jeszcze obecności</h1>
+            <ion-card-content class="card__content">
+                <ion-button (click)="startPresence()">Rozpocznij</ion-button>
+            </ion-card-content>
+        </ion-card>
+    </ng-template>
 </ion-content>
 
 

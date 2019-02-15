@@ -4,7 +4,6 @@ import { CourseRoutingModule } from './course-routing.module';
 import { CourseContainerComponent } from './course-container/course-container.component';
 import { AddCourseComponent } from './add-course/add-course.component';
 import { CoursesListComponent } from './courses-list/courses-list.component';
-import { CourseListItemComponent } from './course-list-item/course-list-item.component';
 import {
   MatButtonModule,
   MatDatepickerModule, MatDialogModule,
@@ -12,7 +11,7 @@ import {
   MatInputModule,
   MatNativeDateModule,
   MatPaginatorModule,
-  MatProgressSpinnerModule, MatSortModule,
+  MatProgressSpinnerModule, MatSelectModule, MatSortModule,
   MatTableModule,
   MatTabsModule
 } from '@angular/material';
@@ -40,12 +39,12 @@ import { CourseEditComponent } from './course-edit/course-edit.component';
     MatSortModule,
     MatDialogModule,
     MatIconModule,
+    MatSelectModule,
   ],
   declarations: [
     CourseContainerComponent,
     AddCourseComponent,
     CoursesListComponent,
-    CourseListItemComponent,
     CourseDayPipe,
     SignToCourseDialogComponent,
     CourseEditComponent

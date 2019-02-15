@@ -36,15 +36,17 @@ export class SignInModalComponent implements OnInit {
 
         const req: AddUserToCourseRequest = {
             userId: this.userService.loggedUser._id,
-            key: this.signInToCourseForm.value.key
+            key: this.signInToCourseForm.value.password
         };
+
+        console.log(req)
 
         this.courseRest.addUserToCourse(this.course._id, req)
             .subscribe(
                 async () => {
                     let toast = await this.toastController.create({
                         position: "top",
-                        message: 'Gratulacje, zostałeś dopisany do kursu!',
+                        message: 'Zostałeś dopisany do kursu!',
                         duration: 3000
                     });
 

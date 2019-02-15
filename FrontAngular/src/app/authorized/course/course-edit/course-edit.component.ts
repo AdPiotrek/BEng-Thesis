@@ -126,13 +126,13 @@ export class CourseEditComponent implements OnInit {
 
   createCourseCreatingForm(): void {
     this.courseCreatingForm = this.fb.group({
-      'name': ['', Validators.required],
-      'key': ['', [Validators.required, Validators.minLength(4)]],
-      'startDate': [new Date().setHours(0, 0, 0), Validators.required],
-      'endDate': [new Date().setHours(0, 0, 0), Validators.required],
-      'partsCount': [1, [Validators.required, Validators.min(1)]],
-      'lessonTime': ['00:45', [Validators.required]],
-      'breakTime': ['00:15', [Validators.required,]]
+      'name': [this.courseService.choosedCourse.name, Validators.required],
+      'key': [this.courseService.choosedCourse.lessonTime, [Validators.required, Validators.minLength(4)]],
+      'startDate': [this.courseService.choosedCourse.startDate, Validators.required],
+      'endDate': [this.courseService.choosedCourse.endDate, Validators.required],
+      'partsCount': [this.courseService.choosedCourse.partsCount, [Validators.required, Validators.min(1)]],
+      'lessonTime': [this.courseService.choosedCourse.lessonTime, [Validators.required]],
+      'breakTime': [this.courseService.choosedCourse.breakTime, [Validators.required,]]
     });
   }
 

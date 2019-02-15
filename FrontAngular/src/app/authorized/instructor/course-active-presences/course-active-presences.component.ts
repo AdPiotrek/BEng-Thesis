@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../../core/services/user.service';
-import { CourseService } from '../../user/services/course.service';
-import { CourseRestService } from '../../course/services/course-rest.service';
-import { UserPresence } from '../../../core/models/user-presence';
-import { UserPresenceService } from '../../user/services/user-presence.service';
-import { switchMap } from 'rxjs/operators';
-import { AlertService } from '../../../core/services/alert.service';
-import { CourseDay } from '../../../core/models/course-day';
+import {Component, OnInit} from '@angular/core';
+import {UserService} from '../../../core/services/user.service';
+import {CourseService} from '../../user/services/course.service';
+import {CourseRestService} from '../../course/services/course-rest.service';
+import {UserPresenceService} from '../../user/services/user-presence.service';
+import {switchMap} from 'rxjs/operators';
+import {AlertService} from '../../../core/services/alert.service';
+import {CourseDay} from '../../../core/models/course-day';
 
 @Component({
   selector: 'app-course-active-presences',
@@ -16,6 +15,9 @@ import { CourseDay } from '../../../core/models/course-day';
 export class CourseActivePresencesComponent implements OnInit {
 
   activePresences: CourseDay = null;
+  error = false;
+  displayedColumns = ['index', 'email', 'firstName', 'lastName', 'delete']
+  interval
 
   constructor(private userService: UserService,
               private courseService: CourseService,
@@ -26,23 +28,41 @@ export class CourseActivePresencesComponent implements OnInit {
 
   ngOnInit() {
     this.getActivePresences();
+
+    this.interval = setInterval(this.getActivePresences.bind(this), 5000)
   }
 
   getActivePresences() {
     this.courseRestService.getActivePresences(this.courseService.choosedCourse._id)
-      .subscribe((courseDay) => {
-        this.activePresences = courseDay;
+      .subscribe((courseDay: any) => {
+        if (courseDay && courseDay.presentUsers.length) {
+          this.activePresences = courseDay;
+          this.error = false;
+        } else {
+          this.activePresences = courseDay;
+          this.error = true;
+        }
       })
   }
 
   endPresence(courseDay, userId) {
-    this.userPresenceService.deletePresences(this.courseService.choosedCourse._id, userId, courseDay)
+    this.userPresenceService.deletePresences(userId, this.courseService.choosedCourse._id, courseDay)
       .pipe(switchMap(() => {
         return this.courseRestService.getActivePresences(this.courseService.choosedCourse._id);
-      })).subscribe((courseDay: CourseDay) => {
-        this.alertService.newAlert('Obecność usunięta');
+      })).subscribe((courseDay: any) => {
+      this.alertService.newAlert('Obecność usunięta');
+      if (courseDay && courseDay.presentUsers.length) {
         this.activePresences = courseDay;
+        this.error = false;
+      } else {
+        this.activePresences = courseDay;
+        this.error = true;
+      }
     })
+  }
+
+  ngOnDestroy() {
+    clearInterval(this.interval)
   }
 
 

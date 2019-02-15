@@ -68,7 +68,12 @@ export class UserListComponent implements OnInit {
         startWith({}),
         switchMap(() => {
           this.isLoadingResults = true;
-          return this.instructorRest.getCourseUsers(this.courseService.choosedCourse._id);
+          return this.instructorRest.getCourseUsers(
+            this.courseService.choosedCourse._id,
+            this.paginator.pageIndex,
+            this.sort.active,
+            this.sort.direction || this.sort.start
+          );
         }),
         map((data: Pagination<User>) => {
           this.isLoadingResults = false;

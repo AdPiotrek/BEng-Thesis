@@ -12,7 +12,23 @@
                     {{p.title}}
                 </ion-item>
             </ion-menu-toggle>
+            <ion-menu-toggle>
+
+            </ion-menu-toggle>
         </ion-list>
+        <ng-container *ngIf="course$ | async as course">
+
+            <div style="position: fixed; bottom: 70px; padding-left: 16px;">
+                Jesteś zalogowany do:
+            </div>
+
+            <ion-item style="position: fixed; bottom: 20px; font-weight: bold" [lines]="'none'">
+                <div>
+                    {{course.name}}
+                </div>
+            </ion-item>
+        </ng-container>
+
     </ion-content>
 
 </ion-menu>

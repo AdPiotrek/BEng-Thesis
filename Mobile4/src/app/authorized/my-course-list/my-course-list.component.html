@@ -1,31 +1,22 @@
 <ion-header>
-  <!--<ion-nav>-->
-  <!--<ion-button menuToggle>-->
-  <!--<ion-icon name="menu"></ion-icon>-->
-  <!--</ion-button>-->
-  <!--<ion-title>Home</ion-title>-->
-  <!--</ion-nav>-->
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>Zaloguj się do kursu!</ion-title>
-  </ion-toolbar>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Zaloguj się do kursu!</ion-title>
+    </ion-toolbar>
 </ion-header>
-<ion-content>
-  <ion-list>
-    <ng-container *ngFor="let course of courses; let i = index">
-      <ion-item lines="none">
-        <ion-label>Nazwa kursu:  {{course.name}}</ion-label>
-      </ion-item>
-      <ion-item lines="none">
-        <ion-label>Start:  {{course.startDate | date:'mediumDate' }}</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-label>Koniec:
-          {{course.endDate | date:'mediumDate'}}</ion-label>
-        <ion-button slot="end" (click)="signIn(course)">Zaloguj się!</ion-button>
-      </ion-item>
-    </ng-container>
-  </ion-list>
+<ion-content padding>
+    <ion-list>
+        <ion-item *ngFor="let course of courses">
+            <div class="item-content">
+                <div class="courseName">{{course.name}}</div>
+                <div class="date">
+                    <span>{{course.startDate | date: 'dd/MM/yyyy'}}</span> -
+                    <span>{{course.endDate | date: 'dd/MM/yyyy'}}</span>
+                </div>
+                <ion-button slot="end" (click)="signIn(course)" [expand]="'full'">Zaloguj się!</ion-button>
+            </div>
+        </ion-item>
+    </ion-list>
 </ion-content>

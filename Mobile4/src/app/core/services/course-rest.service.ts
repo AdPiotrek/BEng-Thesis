@@ -19,8 +19,8 @@ export class CourseRestService {
     return this.http.post(`${environment.restApiUrl}/courses`, course);
   }
 
-  getCourses(page: number): Observable<Pagination<Course>> {
-    return this.http.get<Pagination<Course>>(`${environment.restApiUrl}/courses?page=${page}`)
+  getCourses(page: number, search: string = ''): Observable<Pagination<Course>> {
+    return this.http.get<Pagination<Course>>(`${environment.restApiUrl}/courses?page=${page}&search=${search}`)
   }
 
   addUserToCourse(courseId: string, data: AddUserToCourseRequest): Observable<Course> {

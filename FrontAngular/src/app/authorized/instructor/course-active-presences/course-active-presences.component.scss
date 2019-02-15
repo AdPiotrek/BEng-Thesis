@@ -1,10 +1,50 @@
-.course-days {
-  border-width: 2px;
-  padding: 20px;
+.example-table-container {
+  position: relative;
+  overflow: auto;
+  min-width: 700px;
 }
 
-.flex-container{
-  padding: 20px;
+.flex-container {
+  position: relative;
+}
+
+.table-button {
+  width: 100%;
+}
+
+.action-header-cell {
+  text-align: center;
+  max-width: 100px;
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+
+  td > * {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+
+.example-loading-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
   justify-content: center;
-
 }
+
+.example-rate-limit-reached {
+  color: #980000;
+  text-align: center;
+}
+

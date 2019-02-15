@@ -1,4 +1,8 @@
 <div class="flex-container mat-elevation-z8">
+  <div *ngIf="user$ | async as user"
+       style="padding-left: 10px;padding-top: 10px; background-color: white; font-weight: bold">
+    {{ user.firstName }} {{user.lastName}}
+  </div>
   <div class="example-loading-shade"
        *ngIf="isLoadingResults">
     <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
@@ -32,19 +36,24 @@
         <th mat-header-cell *matHeaderCellDef disableClear>
         </th>
         <td mat-cell *matCellDef="let row">
-          <button mat-button *ngIf="!wasUserPresented(row)" color="primary" class="table-button" (click)="checkUserPresence(row)">Włącz</button>
+          <button mat-button *ngIf="!wasUserPresented(row)" color="primary" class="table-button"
+                  (click)="checkUserPresence(row)">Włącz
+          </button>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="deletePresence">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
-          <button mat-button color="danger" class="table-button" *ngIf="wasUserPresented(row)" (click)="unCheckUserPresence(row)">Usuń</button>
+          <button mat-button color="danger" class="table-button" *ngIf="wasUserPresented(row)"
+                  (click)="unCheckUserPresence(row)">Usuń
+          </button>
         </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;" [ngClass]="{userWasPresented: wasUserPresented(row)}"></tr>
+      <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"
+          [ngClass]="{userWasPresented: wasUserPresented(row)}"></tr>
     </table>
   </div>
 

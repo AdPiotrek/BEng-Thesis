@@ -4,9 +4,6 @@ import { timer } from 'rxjs/internal/observable/timer';
 import * as moment from 'moment'
 import { Observable } from 'rxjs/internal/Observable';
 import { Moment } from 'moment';
-import { UserPresenceToggleComponent } from '../user-presence-toggle/user-presence-toggle.component';
-import { UserPresenceListComponent } from '../user-presence-list/user-presence-list.component';
-import { UserPresenceAvailableDaysComponent } from '../user-presence-available-days/user-presence-available-days.component';
 
 @Component({
   selector: 'app-user-presence-management',
@@ -14,8 +11,6 @@ import { UserPresenceAvailableDaysComponent } from '../user-presence-available-d
   styleUrls: ['./user-presence-management.component.scss']
 })
 export class UserPresenceManagementComponent implements OnInit {
-
-  childRef: UserPresenceToggleComponent | UserPresenceListComponent | UserPresenceAvailableDaysComponent;
 
   timerObservable: Observable<Moment>;
 
@@ -41,12 +36,6 @@ export class UserPresenceManagementComponent implements OnInit {
       );
   }
 
-  changeChildRef(childRef) {
-    this.childRef = childRef;
-  }
 
-  refreshChildContent() {
-    this.childRef.refreshContent()
-  }
 
 }

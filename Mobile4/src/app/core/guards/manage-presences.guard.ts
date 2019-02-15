@@ -25,7 +25,7 @@ export class ManagePresencesGuard implements CanActivate {
       return true;
     }
 
-    this.toastController.create({position: "top", duration: 3000, message: 'Aby dostać się do wybranej ścieżki, zaloguj się do kursu'})
+    this.toastController.create({position: "bottom", duration: 3000, message: 'Aby dostać się do wybranej ścieżki, zaloguj się do kursu'})
         .then((toast) => {
           toast.present();
         });

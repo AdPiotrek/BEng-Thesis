@@ -14,6 +14,7 @@ export class UserRestService {
   constructor(private http: HttpClient) {
   }
 
+
   getUserCourses(id: string): Observable<Pagination<Course>> {
     return this.http.get<Pagination<Course>>(`${environment.restApiUrl}/users/${id}/courses`);
   }

@@ -26,7 +26,7 @@
         <div class="form-control">
           <mat-checkbox matInput placeholder="Powtórz hasło" (change)="roleChange($event)" >Konto instruktora</mat-checkbox>
         </div>
-        <button color="primary"  [disabled]="registerForm.invalid" >Zarejestruj się</button>
+        <button mat-raised-button color="primary"  [disabled]="registerForm.invalid" >Zarejestruj się</button>
       </form>
     </mat-card-content>
     <mat-card-footer class="footer">

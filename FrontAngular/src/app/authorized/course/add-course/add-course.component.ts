@@ -78,9 +78,6 @@ export class AddCourseComponent implements OnInit {
         breakTime = +breakTime.hours * 60 + +breakTime.minutes;
 
         momentObject.add(partsCount * (lessonTime + breakTime), 'minutes');
-        if (+momentObject.hours() < +time.hours) {
-          return {}
-        }
 
         const minutes = momentObject.get('minutes') < 10 ? `0${momentObject.get('minutes')}` : momentObject.get('minutes');
         const hours = momentObject.get('hours')
@@ -96,6 +93,7 @@ export class AddCourseComponent implements OnInit {
       'startDate': [new Date().setHours(0, 0, 0), Validators.required],
       'endDate': [new Date().setHours(0, 0, 0), Validators.required],
       'partsCount': [1, [Validators.required, Validators.min(1)]],
+      'status': 'inProgress',
       'lessonTime': ['00:45', [Validators.required]],
       'breakTime': ['00:15', [Validators.required,]]
     });
@@ -140,9 +138,6 @@ export class AddCourseComponent implements OnInit {
     this.courseRest.addCourse(course)
       .subscribe(
         (x) => {
-          this.courseCreatingForm.reset();
-          this.courseDayForm.reset();
-          this.courseDays = [];
           this.alertService.newAlert('Kurs został dodany pomyślnie');
           this.router.navigateByUrl(`u/${this.userService.loggedUser._id}/courses`)
         },

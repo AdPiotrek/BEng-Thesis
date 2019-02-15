@@ -5,15 +5,22 @@ const User = require('../models/user');
 const router = express.Router();
 
 router.get('', (req, res, next) => {
-    console.log('perPage')
-    let perPage = 10;
-    let page = req.params['page'] > 0 ? req.params['page'] : 0;
-    Course.find()
+    const perPage = 10;
+    const page = req.query['page'] ? req.query['page'] : 0;
+    const sort = req.query['sort'] || 'name';
+    const direction = req.query['direction'] || 'asc';
+
+    Course.find({
+        name: new RegExp(req.query.search || '', 'i')
+    })
         .limit(perPage)
         .skip(perPage * page)
-        .sort({ name: 'asc' })
+        .sort({[sort]: direction})
         .then((courses) => {
-            Course.count()
+            console.log(courses);
+            Course.count({
+                name: new RegExp(req.query.search || '', 'i')
+            })
                 .then(totalPageCount => {
                     const coursePaginationItem = {
                         totalPageCount: Math.ceil(totalPageCount / perPage),
@@ -29,17 +36,17 @@ router.get('', (req, res, next) => {
 
 
 router.post('', async (req, res, next) => {
-    const course = await  Course.findOne({ name: req.body.name });
+    const course = await Course.findOne({name: req.body.name});
     if (course) {
-        res.status(404).send({ message: 'Nazwa kursu jest zajęta, spróbuj podać inną' })
+        res.status(404).send({message: 'Nazwa kursu jest zajęta, spróbuj podać inną'});
         return;
     }
     try {
-        const courseToCreate = { ...req.body };
+        const courseToCreate = {...req.body};
         courseToCreate.instructors = [req.user._id];
         const user = await User.findById(req.user._id);
         let course = new Course(courseToCreate);
-        course.code = '2XCZ';
+        course.code = Math.random().toString(36).substr(2, 5);
 
         course = await course.save();
         user.courses.push(course._id);
@@ -47,7 +54,7 @@ router.post('', async (req, res, next) => {
         res.send(course)
     } catch (err) {
         console.log(err)
-        res.status(500).send({ message: 'Wystąpił nieoczekiwany błąd, spróbuj ponownie później' })
+        res.status(500).send({message: 'Wystąpił nieoczekiwany błąd, spróbuj ponownie później'})
     }
 
 });
@@ -58,14 +65,22 @@ router.put('/:id/users', async (req, res, next) => {
     const preparedCourse = await Course.findById(req.params.id);
 
     const isUserAvailable = preparedCourse.users.find(user => user._id.equals(req.body.userId));
+    const isInstructorExist = preparedCourse.instructors.find(instructors => instructors._id.equals(req.body.userId));
 
-    if (isUserAvailable) {
-        res.status(404).send({ message: 'Jestes już uczestnikiem tego kursu' });
+    if (isInstructorExist) {
+        res.status(404).send({message: 'Jesteś już instruktorem tego kursu'});
         return;
     }
 
+    if (isUserAvailable) {
+        res.status(404).send({message: 'Jesteś już uczestnikiem tego kursu'});
+        return;
+    }
+
+    console.log(preparedCourse.key.toString() !== req.body.key)
+    console.log(preparedCourse.key, req.body.key)
     if (preparedCourse.key.toString() !== req.body.key) {
-        res.status(404).send({ message: 'Podany klucz nie zgadza się' });
+        res.status(404).send({message: 'Podany klucz nie zgadza się'});
         return;
     }
 
@@ -89,7 +104,7 @@ router.put('/:id/users', async (req, res, next) => {
 });
 
 
-router.post('/:id/startPressence',async (req, res, next) => {
+router.post('/:id/startPressence', async (req, res, next) => {
 
     const currentDate = new Date();
 
@@ -97,21 +112,15 @@ router.post('/:id/startPressence',async (req, res, next) => {
 
     const availableCourseDay = course.courseDays.find(day => day.startTime < currentDate && day.endTime > currentDate);
 
-
-    console.log(availableCourseDay)
     if (!availableCourseDay) {
         res.status(400).send();
         return;
     }
 
-    console.log(availableCourseDay.presentUsers)
-
     const isAlreadyRegistered = availableCourseDay.presentUsers.find(id => id.equals(req.params.userId));
 
-    console.log(isAlreadyRegistered);
-
     if (isAlreadyRegistered) {
-        res.status(404).send({ message: 'Obecność jest już aktywna' });
+        res.status(404).send({message: 'Obecność jest już aktywna'});
         return;
     }
 
@@ -131,7 +140,6 @@ router.get('/:id/active-presences', async (req, res, next) => {
     const course = await Course.findById(req.params['id']).populate({path: 'courseDays.presentUsers', model: 'user'});
     const currentCourseDay = course.courseDays.find(day => day.startTime < currentDate && day.endTime > currentDate);
 
-    console.log(currentCourseDay)
     res.send(currentCourseDay);
 });
 

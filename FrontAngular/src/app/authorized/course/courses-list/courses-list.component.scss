@@ -14,9 +14,8 @@ table {
 
 .example-loading-shade {
   position: absolute;
-  top: 0;
+  top: 65.5px;
   left: 0;
-  bottom: 56px;
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.15);
@@ -52,4 +51,9 @@ tr.mat-row {
     background-color: rgba(#000, .2);
     cursor: pointer;
   }
+}
+
+mat-form-field{
+  padding: 0 20px;
+  display: block;
 }

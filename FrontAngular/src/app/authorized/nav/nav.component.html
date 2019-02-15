@@ -8,9 +8,9 @@
     [opened]="!(isHandset$ | async)"
     hasBackdrop="true">
     <mat-toolbar color="primary">Menu</mat-toolbar>
-    <mat-nav-list>
+    <mat-nav-list routerLinkActive>
       <h1 matSubheader>Moje konto</h1>
-      <mat-list-item>
+      <mat-list-item routerLinkActive>
         <a href="navbar">
           <mat-icon class="mat-icon" style="margin: 0 10px 0 0">
             account_circle
@@ -19,42 +19,42 @@
         </a>
       </mat-list-item>
       <h1 matSubheader>Kursy</h1>
-      <mat-list-item>
+      <mat-list-item routerLinkActive="active">
         <a [routerLink]="['/u', loggedUserId, 'courses']">
           Moje kursy
         </a>
       </mat-list-item>
-      <mat-list-item *ngIf="hasUserAccess()">
+      <mat-list-item *ngIf="hasUserAccess()" routerLinkActive="active">
         <a routerLink="/courses" >
           Wyszukaj kursy
         </a>
       </mat-list-item>
-      <mat-list-item *ngIf="hasInstructorAccess()">
+      <mat-list-item *ngIf="hasInstructorAccess()" routerLinkActive="active">
         <a routerLink="/courses/add">
           Dodaj kurs
         </a>
       </mat-list-item>
-      <mat-list-item *ngIf="hasInstructorAccess()">
+      <mat-list-item *ngIf="hasInstructorAccess()" routerLinkActive="active">
         <a routerLink="/i/add-user">
           Dodaj użytkowniaka do kursu
         </a>
       </mat-list-item>
-      <mat-list-item *ngIf="hasUserAccess()">
+      <mat-list-item *ngIf="hasUserAccess()" routerLinkActive="active">
         <a routerLink="/u/presences">
           Zarządzanie obecnościami
         </a>
       </mat-list-item>
-      <mat-list-item *ngIf="hasInstructorAccess()">
+      <mat-list-item *ngIf="hasInstructorAccess()" routerLinkActive="active">
         <a routerLink="/i/users-list">
           Lista użytkowników
         </a>
       </mat-list-item>
-      <mat-list-item *ngIf="hasInstructorAccess()">
+      <mat-list-item *ngIf="hasInstructorAccess()" routerLinkActive="active">
         <a routerLink="/i/course-active-presences">
           Obecnie aktywowane obecności
         </a>
       </mat-list-item>
-      <mat-list-item *ngIf="hasInstructorAccess()">
+      <mat-list-item *ngIf="hasInstructorAccess()" routerLinkActive="active">
         <a routerLink="/courses/edit">
           Edytuj kurs
         </a>

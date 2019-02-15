@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {CourseService} from "../../core/services/course.service";
 
 @Component({
     selector: 'app-authorized',
@@ -6,7 +7,7 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['./authorized.component.scss']
 })
 export class AuthorizedComponent implements OnInit {
-
+    course$;
 
     pages: { title: string, link: string }[] =
         [
@@ -17,10 +18,11 @@ export class AuthorizedComponent implements OnInit {
             {title: 'Kontroluj czas', link: '/time-control'}
         ];
 
-    constructor() {
+    constructor(private courseService: CourseService) {
     }
 
     ngOnInit() {
+        this.course$ = this.courseService.choosedCourse$;
     }
 
 

@@ -2,12 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { UserPresenceService } from '../services/user-presence.service';
 import { UserService } from '../../../core/services/user.service';
 import { CourseService } from '../services/course.service';
-import { UserPresence } from '../../../core/models/user-presence';
 import { Observable } from 'rxjs/internal/Observable';
 import { catchError, map, tap } from 'rxjs/operators';
 import { AlertService } from '../../../core/services/alert.service';
 import { of } from 'rxjs/internal/observable/of';
-import { throwError } from 'rxjs/internal/observable/throwError';
 import { CourseDay } from '../../../core/models/course-day';
 
 @Component({
@@ -17,7 +15,6 @@ import { CourseDay } from '../../../core/models/course-day';
 })
 export class UserPresenceToggleComponent implements OnInit {
 
-  activePresence$: Observable<CourseDay>;
   activePresence: CourseDay;
 
   constructor(private userPresence: UserPresenceService,
@@ -31,12 +28,11 @@ export class UserPresenceToggleComponent implements OnInit {
   }
 
   getActivePresence() {
-    this.activePresence$ = this.userPresence.hasActivePresence(this.userService.loggedUser._id, this.courseService.choosedCourse._id)
-      .pipe(
-        tap((userPresence: CourseDay) => {
-          this.activePresence = userPresence;
-        })
-      )
+    this.userPresence.hasActivePresence(this.userService.loggedUser._id, this.courseService.choosedCourse._id)
+      .subscribe((activePresence) => {
+        console.log(activePresence)
+        this.activePresence = activePresence;
+      })
   }
 
   startPresence() {
@@ -44,13 +40,10 @@ export class UserPresenceToggleComponent implements OnInit {
       .pipe(
         tap(() => this.getActivePresence()),
         catchError(err => {
-          this.alertService.newAlert('Nie można teraz aktywować obecnośći')
+          this.alertService.newAlert('Nie można teraz aktywować obecnośći', 'danger')
           return of(null)
         })
       ).subscribe()
   }
 
-  refreshContent() {
-
-  }
 }
