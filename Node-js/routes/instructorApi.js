@@ -90,6 +90,7 @@ router.put('/course/:id/add/user', async (req, res, next) => {
 //Update course
 router.put('/course/:id', async (req, res, next) => {
     try {
+        console.log(req.body)
         let course = await Course.findByIdAndUpdate(req.params['id'], req.body.course);
         res.send(course)
     } catch (e) {
@@ -126,16 +127,12 @@ router.put('/course/:id/delete/user/:userId', async (req, res, next) => {
 });
 
 router.put('/course/:id/coursedays', async (req, res, next) => {
-
     try {
         let course = await Course.findById(req.params['id']);
-        req.params.body.courseDays.forEach((courseDay) => {
-            if (courseDay._id) {
-                course.courseDays.id[courseDay._id] = {...course.courseDays.id(courseDay._id), courseDay};
-            }
-            course.courseDays.push(courseDay);
-        });
-        await course.save();
+        console.log(course)
+        course.courseDays = req.body.courseDays;
+        console.warn(course);
+            await course.save();
         res.send(course)
     } catch (e) {
         console.log(e);

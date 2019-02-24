@@ -26,7 +26,7 @@ export class CourseEditComponent implements OnInit {
     this.courseService.choosedCourse.courseDays.forEach((courseDate) => {
       minDate = minDate < courseDate.startTime ? courseDate.startTime : minDate;
       maxDate = maxDate > courseDate.endTime ? courseDate.endTime : maxDate;
-    })
+    });
 
 
     return day.valueOf() > minDate && day.valueOf() < maxDate;
@@ -225,7 +225,7 @@ export class CourseEditComponent implements OnInit {
     };
   }
 
-  updateCourseDays() {
+    updateCourseDays() {
     this.courseRest.updateCourseDays(this.courseService.choosedCourse._id, this.courseDays)
       .subscribe((course) => {
           this.courseService.changeChoosedCourse(course);

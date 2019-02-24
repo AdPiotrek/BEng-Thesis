@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content padding>
-    <form [formGroup]="registerForm" (ngSubmit)="registerUser()">
+    <form [formGroup]="registerForm" (ngSubmit)="registerUser()" class="fullscreen login-form">
         <ion-item>
             <ion-input type="text" placeholder="Imię" formControlName="firstName"></ion-input>
         </ion-item>
@@ -31,7 +31,7 @@
             <ion-label>Konto instruktora</ion-label>
             <ion-checkbox (ionChange)="roleChange($event)">Konto instruktora</ion-checkbox>
         </ion-item>
-        <ion-button type="submit" class="form-button" [disabled]="registerForm.invalid">Zarejestruj się</ion-button>
+        <ion-button type="submit" [expand]="'full'" [disabled]="registerForm.invalid">Zarejestruj się</ion-button>
+        <p>Masz konto ? <a routerLink="/login">Zaloguj się!</a></p>
     </form>
-    <p>Masz konto ? <a routerLink="/login">Zaloguj się!</a></p>
 </ion-content>

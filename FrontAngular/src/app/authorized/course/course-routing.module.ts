@@ -5,13 +5,14 @@ import { CourseContainerComponent } from './course-container/course-container.co
 import { CoursesListComponent } from './courses-list/courses-list.component';
 import { AddCourseComponent } from './add-course/add-course.component';
 import { CourseEditComponent } from './course-edit/course-edit.component';
+import {ManagePresencesGuard} from "../../core/guards/manage-presences.guard";
 
 const routes: Routes = [
   {
     path: 'courses', component: CourseContainerComponent, children: [
       { path: '', component: CoursesListComponent },
       { path: 'add', component: AddCourseComponent },
-      { path: 'edit', component: CourseEditComponent}
+      { path: 'edit', component: CourseEditComponent, canActivate: [ManagePresencesGuard]}
     ]
   }
 ];

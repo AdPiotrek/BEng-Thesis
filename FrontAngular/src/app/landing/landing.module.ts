@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { RegisterComponent } from './register/register.component';
+import {SharedModule} from "../shared/shared.module";
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { RegisterComponent } from './register/register.component';
     MatInputModule,
     MatCardModule,
     MatButtonModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    SharedModule
   ],
   declarations: [
     FooterComponent,

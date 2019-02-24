@@ -14,12 +14,24 @@
   width: 100%;
   padding-left: 0;
   padding-right: 0;
+
   ion-button {
     width: 100%;
+
     ::ng-deep {
       .button-native {
         width: 100%;
       }
     }
   }
+}
+
+.fullscreen-container {
+  height: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 30%;
 }

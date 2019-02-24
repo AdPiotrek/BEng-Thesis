@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {AuthService} from "../core/services/auth.service";
 import {UserService} from "../core/services/user.service";
 import {ToastController} from "@ionic/angular";
+import {environment} from "../../environments/environment";
 
 @Component({
     selector: 'app-login',
@@ -38,12 +39,10 @@ export class LoginPage implements OnInit {
         this.authService.login(this.loginForm.value)
             .subscribe(
                 async (user: User) => {
-                    alert
                     this.userService.loggedUser = {...user};
                     this.router.navigate(['course-list'])
                 },
                 async (err) => {
-                    alert(JSON.stringify(err));
                     let toast = await this.toastController.create({
                         message: 'Niepoprawny email lub hasło, spróbuj ponownie',
                         position: "top",

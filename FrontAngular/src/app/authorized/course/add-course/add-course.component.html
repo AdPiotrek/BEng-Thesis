@@ -8,7 +8,7 @@
         <input matInput placeholder="Klucz do kursu" type="password" formControlName="key">
       </mat-form-field>
       <mat-form-field>
-        <input matInput [matDatepicker]="startPicker" placeholder="Data rozpoczęcia kursu" formControlName="startDate">
+        <input matInput [matDatepicker]="startPicker" [matDatepickerFilter]="endDateFilter" placeholder="Data rozpoczęcia kursu" formControlName="startDate">
         <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
         <mat-datepicker #startPicker></mat-datepicker>
       </mat-form-field>
@@ -41,7 +41,7 @@
       <mat-datepicker #courseDayPicker></mat-datepicker>
     </mat-form-field>
     <mat-form-field>
-      <input matInput placeholder="Liczba jednostek" type="number" formControlName="partsCount">
+      <input matInput placeholder="Liczba jednostek" type="number" formControlName="partsCount" min="1">
     </mat-form-field>
     <mat-form-field>
       <input matInput placeholder="Czas startu" type="time" formControlName="startTime">

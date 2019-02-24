@@ -7,10 +7,9 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <ion-list>
+<ion-content padding>
         <ion-item>
-            Obecnie wybrany dzień: {{courseDay?.startTime | date : 'shortDate'}}
+            Obecnie wybrany dzień: {{courseDay?.startTime | date : 'dd/MM/yyyy'}}
         </ion-item>
         <ion-item>
             <ion-label>Dni kursu</ion-label>
@@ -20,7 +19,6 @@
                 </ion-select-option>
             </ion-select>
         </ion-item>
-    </ion-list>
     <ion-card>
         <ion-card-header>
             <ion-card-title>

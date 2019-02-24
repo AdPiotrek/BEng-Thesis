@@ -45,6 +45,6 @@ export class CourseRestService {
   }
 
   updateCourseDays(courseId: string, courseDays: CourseDay[]) {
-    return this.http.put<Course>(`${environment.restApiUrl}/instructor/course/${courseId}`, {courseDays})
+    return this.http.put<Course>(`${environment.restApiUrl}/instructor/course/${courseId}/coursedays`, {courseDays})
   }
 }

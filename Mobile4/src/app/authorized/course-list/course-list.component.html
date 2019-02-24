@@ -15,7 +15,7 @@
                     <span>{{course.startDate | date: 'dd/MM/yyyy'}}</span> -
                     <span>{{course.endDate | date: 'dd/MM/yyyy'}}</span>
                 </div>
-                <ion-button slot="end" (click)="signIn(course)" [expand]="'full'">Zaloguj się!</ion-button>
+                <ion-button slot="end" (click)="openSignInModal(course)" [expand]="'full'">Zaloguj się!</ion-button>
             </div>
         </ion-item>
     </ion-list>

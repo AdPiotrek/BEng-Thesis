@@ -23,6 +23,7 @@ import { CourseTimeComponent } from './authorized/course-time/course-time.compon
 import { SecondsToTimePipe } from './shared/seconds-to-time.pipe';
 import {LocalNotifications} from "@ionic-native/local-notifications/ngx";
 import {IonicStorageModule} from "@ionic/storage";
+import {NativeAudio} from "@ionic-native/native-audio/ngx";
 
 @NgModule({
     declarations: [
@@ -48,8 +49,7 @@ import {IonicStorageModule} from "@ionic/storage";
         IonicModule.forRoot(),
         AppRoutingModule,
         HttpClientModule,
-        IonicStorageModule.forRoot()
-
+        IonicStorageModule.forRoot(),
     ],
     providers: [
         StatusBar,

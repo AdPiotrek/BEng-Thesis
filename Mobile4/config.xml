@@ -87,5 +87,6 @@
     <allow-navigation href="http://192.168.0.157:8101" sessionid="96a39195" />
     <allow-navigation href="http://192.168.0.157:8100" sessionid="c5d7cae7" />
     <plugin name="cordova-sqlite-storage" spec="^2.5.1" />
-    <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-plugin-nativeaudio" spec="^3.0.9" />
+    <engine name="android" spec="~7.0.0" />
 </widget>

@@ -57,7 +57,9 @@ export class RegisterComponent implements OnInit {
         }
         this.router.navigate(['courses']);
         this.alertService.newAlert('Rejestracja zakończona pomyślnie, zostałeś zalogowany', 'success', 5000)
-      }, () => {
+      }, (err) => {
+        console.log('xD');
+        console.log('err');
         this.alertService.newAlert('Wystąpił błąd, spróbuj ponownie później.', 'danger', 5000)
       })
   }

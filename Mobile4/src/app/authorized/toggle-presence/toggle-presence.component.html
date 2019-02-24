@@ -9,20 +9,17 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
-    <h1 *ngIf="(activePresence$ | async) as presence; else disactive"
-        style="position: fixed;padding: 20px;top: 45%; transform: translateY(-50%)">
-        Jesteś obecny na zajęciach od {{presence.startTime | date:'dd/MM/yyyy HH:mm'}}
-        do {{presence.endTime | date:'dd/MM/yyyy HH:mm'}}
-    </h1>
-    <ng-template class="presence-active" #disactive>
-        <ion-card class="card">
-            <h1>Nie aktywowano jeszcze obecności</h1>
-            <ion-card-content class="card__content">
-                <ion-button (click)="startPresence()">Rozpocznij</ion-button>
-            </ion-card-content>
-        </ion-card>
-    </ng-template>
+<ion-content padding>
+    <div class="fullscreen-container">
+        <h1 *ngIf="(activePresence$ | async) as presence; else disactive">
+            Jesteś obecny na zajęciach od {{presence.startTime | date:'dd/MM/yyyy HH:mm'}}
+            do {{presence.endTime | date:'dd/MM/yyyy HH:mm'}}
+        </h1>
+        <ng-template class="presence-active" #disactive>
+                <h1 style="padding-bottom: 10px">Nie aktywowano jeszcze obecności</h1>
+                <ion-button [expand]="'full'"  style="width: 100%" (click)="startPresence()">Rozpocznij</ion-button>
+        </ng-template>
+    </div>
 </ion-content>
 
 

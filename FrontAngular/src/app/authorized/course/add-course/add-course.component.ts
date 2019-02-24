@@ -1,15 +1,15 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CourseRestService } from '../services/course-rest.service';
-import { Course } from '../../../core/models/course';
-import { CourseDay } from '../../../core/models/course-day';
-import { AlertService } from '../../../core/services/alert.service';
-import { endTimeValidator } from '../../../shared/validators/end-time-validator';
-import { combineLatest, map, tap } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CourseRestService} from '../services/course-rest.service';
+import {Course} from '../../../core/models/course';
+import {CourseDay} from '../../../core/models/course-day';
+import {AlertService} from '../../../core/services/alert.service';
+import {endTimeValidator} from '../../../shared/validators/end-time-validator';
+import {combineLatest, map, tap} from 'rxjs/operators';
 import * as moment from 'moment'
-import { Moment } from 'moment';
-import { merge } from 'rxjs';
-import { of } from 'rxjs/internal/observable/of';
+import {Moment} from 'moment';
+import {merge} from 'rxjs';
+import {of} from 'rxjs/internal/observable/of';
 import {Router} from "@angular/router";
 import {UserService} from "../../../core/services/user.service";
 
@@ -26,6 +26,10 @@ export class AddCourseComponent implements OnInit {
   startDateFilter = (day: Date): boolean => {
     return day >= this.courseCreatingForm.value['startDate']
   };
+
+  endDateFilter = (day: any): boolean => {
+    return day <= this.courseCreatingForm.value['endDate'];
+  }
 
   constructor(public fb: FormBuilder,
               public courseRest: CourseRestService,
@@ -46,8 +50,8 @@ export class AddCourseComponent implements OnInit {
       tap((value) => {
         this.courseDays.forEach((courseDay) => {
 
-          let { lessonTime, breakTime } = value;
-          const { partsCount } = courseDay;
+          let {lessonTime, breakTime} = value;
+          const {partsCount} = courseDay;
 
           lessonTime = this.getTimeFromInput(lessonTime);
           breakTime = this.getTimeFromInput(breakTime);
@@ -64,12 +68,12 @@ export class AddCourseComponent implements OnInit {
       })
     ).subscribe()
 
-    this.courseDayForm.get('startTime').valueChanges.pipe(
+    merge(this.courseDayForm.get('startTime').valueChanges).pipe(
       combineLatest(timeValueChange),
       map(([value, formValue]) => {
         const time = this.getTimeFromInput(value);
         const momentObject: Moment = moment().hour(+time.hours).minutes(+time.minutes);
-        let { lessonTime, breakTime } = formValue;
+        let {lessonTime, breakTime} = formValue;
         const partsCount = this.courseDayForm.value.partsCount;
         lessonTime = this.getTimeFromInput(lessonTime);
         breakTime = this.getTimeFromInput(breakTime);
@@ -80,11 +84,43 @@ export class AddCourseComponent implements OnInit {
         momentObject.add(partsCount * (lessonTime + breakTime), 'minutes');
 
         const minutes = momentObject.get('minutes') < 10 ? `0${momentObject.get('minutes')}` : momentObject.get('minutes');
-        const hours = momentObject.get('hours')
-        this.courseDayForm.patchValue({ 'endTime': `${hours}:${minutes}` })
+        const hours = momentObject.get('hours') < 10 ? `0${momentObject.get('hours')}`: momentObject.get('hours');
+
+        console.log(hours, minutes)
+        this.courseDayForm.patchValue({'endTime': `${hours}:${minutes}`})
+      }),
+    ).subscribe()
+
+    merge(this.courseDayForm.get('partsCount').valueChanges).pipe(
+      combineLatest(timeValueChange),
+      map(([_, formValue]) => {
+
+        const value = this.courseDayForm.get('startTime').value;
+        if (value.trim() === '') {
+          return;
+        }
+        const time = this.getTimeFromInput(value);
+        const momentObject: Moment = moment().hour(+time.hours).minutes(+time.minutes);
+        let {lessonTime, breakTime} = formValue;
+        const partsCount = this.courseDayForm.value.partsCount;
+        lessonTime = this.getTimeFromInput(lessonTime);
+        breakTime = this.getTimeFromInput(breakTime);
+
+        lessonTime = +lessonTime.hours * 60 + +lessonTime.minutes;
+        breakTime = +breakTime.hours * 60 + +breakTime.minutes;
+
+        momentObject.add(partsCount * (lessonTime + breakTime), 'minutes');
+
+        const minutes = momentObject.get('minutes') < 10 ? `0${momentObject.get('minutes')}` : momentObject.get('minutes');
+        const hours = momentObject.get('hours') < 10 ? `0${momentObject.get('hours')}`: momentObject.get('hours');
+
+        console.log(hours, minutes)
+        this.courseDayForm.patchValue({'endTime': `${hours}:${minutes}`})
       }),
     ).subscribe()
   }
+
+
 
   createCourseCreatingForm(): void {
     this.courseCreatingForm = this.fb.group({
@@ -105,7 +141,7 @@ export class AddCourseComponent implements OnInit {
       'startTime': ['', [Validators.required]],
       'endTime': ['', [Validators.required]],
       'partsCount': [1, [Validators.required, Validators.min(1)]],
-    }, { validator: endTimeValidator });
+    }, {validator: endTimeValidator});
   }
 
   addCourseDay(): void {
@@ -135,6 +171,15 @@ export class AddCourseComponent implements OnInit {
       ...this.courseCreatingForm.value,
       courseDays: [...this.courseDays]
     };
+
+    if (course.startDate > course.endDate) {
+      this.alertService.newAlert('Daty rozpoczęcia lub zakończenia kursu są nieprawidłowe', 'danger');
+    }
+
+    if (this.validateDays(course)) {
+      this.alertService.newAlert('Planowane dni odbywania się kursu nie znajdują się pomiedzy datą startu i zakończenia', 'danger');
+    }
+
     this.courseRest.addCourse(course)
       .subscribe(
         (x) => {
@@ -191,6 +236,17 @@ export class AddCourseComponent implements OnInit {
     this.courseDays = this.courseDays.filter((day) => day !== courseDay)
   }
 
+  validateDays(coourse: Course) {
 
+    return coourse.courseDays.find(day => this.isDateInCourse(coourse, day.startTime) && this.isDateInCourse(coourse, day.endTime))
+  }
+
+  isDateInCourse(course: Course, date: Date | number) {
+    if (typeof date === 'number') {
+      return course.startDate <= date && course.endDate >= date
+    }
+
+    return course.startDate <= date.getTime() && course.endDate >= date.getTime();
+  }
 
 }

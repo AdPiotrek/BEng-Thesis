@@ -5,6 +5,7 @@ import {CourseService} from "../../core/services/course.service";
 import {CourseRestService} from "../../core/services/course-rest.service";
 import {Storage} from "@ionic/storage";
 import {CourseDay} from "../../core/models/course-day";
+import {NativeAudio} from "@ionic-native/native-audio/ngx";
 
 @Component({
     selector: 'app-course-time',
@@ -31,13 +32,34 @@ export class CourseTimeComponent implements OnInit {
                 private alertController: AlertController,
                 private courseService: CourseService,
                 private courseRestService: CourseRestService,
-                private storage: Storage) {
+                private storage: Storage,
+                private nativeAudio: NativeAudio) {
 
     }
 
     async ngOnInit() {
+
+
+
+    }
+
+    handleSelectChange() {
+            console.log('xxxx', this.courseDay);
+            if(this.isFirstChange) {
+                return
+            }
+            this.leftOfLesson = this.mapToSecond(this.courseService.choosedCourse.lessonTime);
+            this.leftOfBreak = this.mapToSecond(this.courseService.choosedCourse.breakTime);
+            this.realizedLessons = 0;
+            this.realizedBreak = 0;
+            this.partsCount = this.courseDay.partsCount;
+    }
+
+    async ionViewWillEnter() {
+
         const timeObj = await this.storage.get('timeObj');
-        if (timeObj && timeObj.courseId === this.courseService.choosedCourse._id) {
+        console.log(timeObj)
+        if (timeObj && timeObj.courseDay && timeObj.courseId === this.courseService.choosedCourse._id) {
             console.log('setting course day')
             this.leftOfLesson = timeObj.leftOfLesson;
             this.leftOfBreak = timeObj.leftOfBreak;
@@ -59,27 +81,15 @@ export class CourseTimeComponent implements OnInit {
             })
         }, 1000 * 20)
 
+        await this.nativeAudio.preloadSimple('1', 'assets/sounds/schoolRing.mp3');
 
-
-    }
-
-    handleSelectChange() {
-            console.log('xxxx', this.courseDay);
-            if(this.isFirstChange) {
-                return
-            }
-            this.leftOfLesson = this.mapToSecond(this.courseService.choosedCourse.lessonTime);
-            this.leftOfBreak = this.mapToSecond(this.courseService.choosedCourse.breakTime);
-            this.realizedLessons = 0;
-            this.realizedBreak = 0;
-            this.partsCount = this.courseDay.partsCount;
-    }
-
-    ionViewWillEnter() {
         this.courseRestService.getCourseDays(this.courseService.choosedCourse._id)
             .subscribe(async (courseDays) => {
                 this.courseDays = courseDays;
+                console.log(this.hasPreviousState,' has prev state' );
                 if (!this.hasPreviousState) {
+
+                    console.log('selected ocourse day dont ocucred')
                     this.courseDay = courseDays[0];
                     this.leftOfLesson = this.mapToSecond(this.courseService.choosedCourse.lessonTime);
                     this.leftOfBreak = this.mapToSecond(this.courseService.choosedCourse.breakTime);
@@ -107,16 +117,19 @@ export class CourseTimeComponent implements OnInit {
             } else {
                 this.leftOfLesson = this.mapToSecond(this.courseService.choosedCourse.lessonTime);
                 this.endLesson();
+                this.realizedLessons += 1;
+                this.nativeAudio.play('1').then(() => console.log('play') );
+
                 this.localNotifications.schedule({
                     id: this.notificationId++,
-                    text: `Lekcja nr ${++this.realizedLessons} zrealizowana`,
+                    text: `Lekcja nr ${this.realizedLessons} zrealizowana`,
                     led: '00FF00',
                     sound: 'file://assets/sounds/schoolRing.mp3',
                     vibrate: true
                 });
                 let alert = await this.alertController.create({
                     header: 'Informacja',
-                    message: `Lekcja nr ${++this.realizedLessons} zrealizowana`
+                    message: `Lekcja nr ${this.realizedLessons} zrealizowana`
                 });
 
                 alert.present();
@@ -151,9 +164,12 @@ export class CourseTimeComponent implements OnInit {
             } else {
                 this.leftOfBreak = this.mapToSecond(this.courseService.choosedCourse.breakTime);
                 this.endBreak();
+                this.realizedBreak += 1;
+                this.nativeAudio.play('1').then(() => console.log('play') );
+
                 this.localNotifications.schedule({
                     id: this.notificationId++,
-                    text: `Przerwa nr ${++this.realizedLessons} zakończona`,
+                    text: `Przerwa nr ${this.realizedBreak} zakończona`,
                     led: '00FF00',
                     sound: 'file://assets/sounds/schoolRing.mp3',
                     vibrate: true
@@ -161,7 +177,7 @@ export class CourseTimeComponent implements OnInit {
 
                 let alert = await this.alertController.create({
                     header: 'Informacja',
-                    message: `Przerwa nr ${++this.realizedLessons} zrealizowana`
+                    message: `Przerwa nr ${this.realizedBreak} zrealizowana`
                 });
 
                 alert.present();
